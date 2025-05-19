@@ -1,7 +1,9 @@
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
-let boxX = 0;
+let knightX = 0;
+const knightImg = new Image();
+knightImg.src = './assets/knight-sheet.png';
 
 function draw() {
     requestAnimationFrame(draw);
@@ -9,10 +11,9 @@ function draw() {
     ctx.fillStyle = 'deepSkyBlue';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = 'orange';
-    ctx.fillRect(boxX, 0, 100, 100);
+    ctx.drawImage(knightImg, 0, 0, 15, 19, knightX, 0, 15, 19);
 
-    boxX += 0.5;
+    knightX += 0.5;
 }
 
 requestAnimationFrame(draw);
