@@ -11,6 +11,8 @@ function draw() {
 
     ctx.fillStyle = 'orange';
     ctx.fillRect(boxX, 0, 100, 100);
+
+    boxX += 0.5;
 }
 
 requestAnimationFrame(draw);
