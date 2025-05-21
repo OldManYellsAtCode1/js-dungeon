@@ -1,35 +1,21 @@
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
-let knightX = 0;
-let knightY = 0;
+const hero = new Hero();
 
-const knightImg = new Image();
-knightImg.src = './assets/knight-sheet.png';
+let lastTime = 0;
 
-function draw() {
+function draw(currentTime) {
+    let deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+
     requestAnimationFrame(draw);
+    hero.move(deltaTime);
 
     ctx.fillStyle = 'deepSkyBlue';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.drawImage(knightImg, 0, 0, 15, 19, knightX, knightY, 15, 19);
-
-    if (keys.get('ArrowRight')) {
-        knightX += 0.5;
-    }
-
-    if (keys.get('ArrowLeft')) {
-        knightX -= 0.5;
-    }
-
-    if (keys.get('ArrowUp')) {
-        knightY -= 0.5;
-    }
-
-    if (keys.get('ArrowDown')) {
-        knightY += 0.5;
-    }
+    hero.draw();
 }
 
 requestAnimationFrame(draw);
