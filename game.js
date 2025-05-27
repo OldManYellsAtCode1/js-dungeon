@@ -12,9 +12,9 @@ function draw(currentTime) {
     requestAnimationFrame(draw);
     hero.move(deltaTime);
 
-    ctx.fillStyle = 'deepSkyBlue';
+    ctx.fillStyle = '#040720';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+    map.drawMap(level1);
     hero.draw();
 }
 

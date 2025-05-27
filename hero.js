@@ -1,6 +1,6 @@
 class Hero {
-    x = 0;
-    y = 0;
+    x = 400;
+    y = 320;
     speed = 120; // Speed is in pixels per second
     img = new Image();
 
@@ -29,6 +29,6 @@ class Hero {
     }
 
     draw() {
-        ctx.drawImage(hero.img, 0, 0, 15, 19, hero.x, hero.y, 30, 38);
+        ctx.drawImage(hero.img, 0, 0, 15, 19, hero.x, hero.y, 24, 30);
     }
 }
