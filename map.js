@@ -1,7 +1,7 @@
 const TILE_SIZE = 32;
 
 const tilesetImg = new Image();
-tilesetImg.src = 'assets/tileset_dungeon.png';
+tilesetImg.src = 'assets/tileset-dungeon.png';
 
 const map = {
     drawMap(level) {

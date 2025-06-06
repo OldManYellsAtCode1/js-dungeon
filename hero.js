@@ -29,6 +29,6 @@ class Hero {
     }
 
     draw() {
-        ctx.drawImage(hero.img, 0, 0, 15, 19, hero.x, hero.y, 24, 30);
+        ctx.drawImage(this.img, 0, 0, 15, 19, this.x, this.y, 24, 30);
     }
 }
