@@ -4,6 +4,29 @@ const tileSelectorCtx = tileSelectorCanvas.getContext('2d');
 const editor = {
     selectedTile: null,
 
+    draw() {
+        this.drawTileSelector();
+        let selectedTileCoords = this.getSelectedTileCoords(tileSelectorCanvas);
+
+        if (selectedTileCoords !== null) {
+            this.highlightSelectedTile(selectedTileCoords, tileSelectorCtx, 'Lime');
+
+            if (mouse.down) {
+                this.updateSelectedTile(selectedTileCoords);
+            }
+        }
+
+        let gameCanvasTileCoordinates = this.getSelectedTileCoords(gameCanvas);
+
+        if (gameCanvasTileCoordinates !== null) {
+            this.highlightSelectedTile(gameCanvasTileCoordinates, gameCtx, 'Red');
+
+            if (mouse.down && this.selectedTile !== null) {
+                this.updateMap(gameCanvasTileCoordinates);
+            }
+        }
+    },
+
     drawTileSelector() {
         tileSelectorCtx.fillStyle = 'AliceBlue';
         tileSelectorCtx.fillRect(0, 0, TILE_SELECTOR_SIZE, TILE_SELECTOR_SIZE);
@@ -26,12 +49,12 @@ const editor = {
         tileSelectorCtx.drawImage(tilesetImg, 0, 0);
     },
 
-    getSelectedTileCoords() {
-        const localX = mouse.x - tileSelectorCanvas.offsetLeft;
-        const localY = mouse.y - tileSelectorCanvas.offsetTop;
+    getSelectedTileCoords(canvas) {
+        const localX = mouse.x - canvas.offsetLeft;
+        const localY = mouse.y - canvas.offsetTop;
 
-        if (localX > 0 && localX < tileSelectorCanvas.width &&
-            localY > 0 && localY < tileSelectorCanvas.height) {
+        if (localX > 0 && localX < canvas.width &&
+            localY > 0 && localY < canvas.height) {
 
             return {
                 x: Math.floor(localX / TILE_SIZE),
@@ -42,10 +65,10 @@ const editor = {
         return null;
     },
 
-    highlightSelectedTile(coords) {
-        tileSelectorCtx.strokeStyle = 'Lime';
+    highlightSelectedTile(coords, ctx, color) {
+        ctx.strokeStyle = color;
 
-        tileSelectorCtx.strokeRect(
+        ctx.strokeRect(
             coords.x * TILE_SIZE,
             coords.y * TILE_SIZE,
             TILE_SIZE,
@@ -56,9 +79,10 @@ const editor = {
     updateSelectedTile(selectedTileCoords) {
         let selected = null;
 
-        for (let tile of Object.values(level1.tiles)) {
+        for (let id in level1.tiles) {
+            const tile = level1.tiles[id];
             if (selectedTileCoords.x === tile.x && selectedTileCoords.y === tile.y) {
-                selected = tile;
+                selected = id;
             }
         }
 
@@ -69,16 +93,8 @@ const editor = {
         console.log(this.selectedTile);
     },
 
-    draw() {
-        this.drawTileSelector();
-        let selectedTileCoords = this.getSelectedTileCoords();
-
-        if (selectedTileCoords !== null) {
-            this.highlightSelectedTile(selectedTileCoords);
-
-            if (mouse.down) {
-                this.updateSelectedTile(selectedTileCoords);
-            }
-        }
+    updateMap(tileCoords) {
+        debugger;
+        level1.map[tileCoords.y][tileCoords.x] = this.selectedTile;
     },
 };

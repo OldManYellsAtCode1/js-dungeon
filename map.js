@@ -11,7 +11,7 @@ const map = {
                 const dstX = x * TILE_SIZE;
                 const dstY = y * TILE_SIZE;
 
-                ctx.drawImage(
+                gameCtx.drawImage(
                     tilesetImg,
                     srcX, srcY, TILE_SIZE, TILE_SIZE, // Source section on tileset canvas
                     dstX, dstY, TILE_SIZE, TILE_SIZE, // Destination on game canvas

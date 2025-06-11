@@ -29,6 +29,6 @@ class Hero {
     }
 
     draw() {
-        ctx.drawImage(this.img, 0, 0, 15, 19, this.x, this.y, 24, 30);
+        gameCtx.drawImage(this.img, 0, 0, 15, 19, this.x, this.y, 24, 30);
     }
 }

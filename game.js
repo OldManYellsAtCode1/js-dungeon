@@ -1,8 +1,8 @@
 const TILE_SIZE = 32;
 const TILE_SELECTOR_SIZE = 512;
 
-const canvas = document.getElementById('game-canvas');
-const ctx = canvas.getContext('2d');
+const gameCanvas = document.getElementById('game-canvas');
+const gameCtx = gameCanvas.getContext('2d');
 
 const tilesetImg = new Image();
 tilesetImg.src = 'assets/tileset-dungeon.png';
@@ -26,12 +26,12 @@ function draw(currentTime) {
 
     requestAnimationFrame(draw);
 
-    editorEnabled && editor.draw();
     hero.move(deltaTime);
-    ctx.fillStyle = '#040720';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    gameCtx.fillStyle = '#040720';
+    gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
     map.drawMap(level1);
     hero.draw();
+    editorEnabled && editor.draw();
 }
 
 requestAnimationFrame(draw);
