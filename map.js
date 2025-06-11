@@ -13,10 +13,13 @@ const map = {
                 const srcX = tile.x * TILE_SIZE;
                 const srcY = tile.y * TILE_SIZE;
 
+                const dstX = x * TILE_SIZE;
+                const dstY = y * TILE_SIZE;
+
                 ctx.drawImage(
                     tilesetImg,
                     srcX, srcY, TILE_SIZE, TILE_SIZE, // Source section on tileset canvas
-                    x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, // Destination on game canvas
+                    dstX, dstY, TILE_SIZE, TILE_SIZE, // Destination on game canvas
                 );
             }
         }
