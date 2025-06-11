@@ -7,6 +7,21 @@
 <body>
     <canvas id="game-canvas" width="800" height="640"></canvas>
     <canvas id="tile-selector-canvas" width="512" height="512" class="editor"></canvas>
+    <canvas id="selected-tile-canvas" width="128" height="128" class="editor"></canvas>
+    <div id="editor-controls" class="editor">
+        <form action="" id="selected-tile-form">
+            <label for="tile-name">Tile Name:</label>
+            <input type="text" name="tile-name" id="tile-name">
+
+            <label for="tile-is-pass">Is Passable:</label>
+            <input type="checkbox" name="tile-is-pass" id="tile-is-pass">
+
+            <label for="tile-is-obj">Is Object:</label>
+            <input type="checkbox" name="tile-is-obj" id="tile-is-obj">
+
+            <button type="submit">Update</button>
+        </form>
+    </div>
     <script src="input.js"></script>
     <script src="hero.js"></script>
     <script src="level1.js"></script>

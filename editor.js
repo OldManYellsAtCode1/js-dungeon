@@ -1,8 +1,11 @@
 const tileSelectorCanvas = document.getElementById('tile-selector-canvas');
 const tileSelectorCtx = tileSelectorCanvas.getContext('2d');
 
+const selectedTileCanvas = document.getElementById('selected-tile-canvas');
+const selectedTileCtx = selectedTileCanvas.getContext('2d');
+
 const editor = {
-    selectedTile: null,
+    selected: null,
 
     draw() {
         this.drawTileSelector();
@@ -13,6 +16,8 @@ const editor = {
 
             if (mouse.down) {
                 this.updateSelectedTile(selectedTileCoords);
+                this.drawPreview(selectedTileCoords);
+                this.updateForm();
             }
         }
 
@@ -21,7 +26,7 @@ const editor = {
         if (gameCanvasTileCoordinates !== null) {
             this.highlightSelectedTile(gameCanvasTileCoordinates, gameCtx, 'Red');
 
-            if (mouse.down && this.selectedTile !== null) {
+            if (mouse.down && this.selected !== null) {
                 this.updateMap(gameCanvasTileCoordinates);
             }
         }
@@ -82,19 +87,76 @@ const editor = {
         for (let id in level1.tiles) {
             const tile = level1.tiles[id];
             if (selectedTileCoords.x === tile.x && selectedTileCoords.y === tile.y) {
-                selected = id;
+                selected = { id: id, coords: selectedTileCoords };
             }
         }
 
-        if (selected !== null) {
-            this.selectedTile = selected;
+        if (selected === null) {
+            selected = {
+                id: selectedTileCoords.x.toString(16) + selectedTileCoords.y.toString(16),
+                coords: selectedTileCoords,
+            }
         }
 
-        console.log(this.selectedTile);
+        this.selected = selected;
+
+        console.log(this.selected);
     },
 
-    updateMap(tileCoords) {
-        debugger;
-        level1.map[tileCoords.y][tileCoords.x] = this.selectedTile;
+    updateMap(coords) {
+        let tile = level1.tiles[this.selected.id];
+
+        if (tile) {
+            level1.map[coords.y][coords.x] = this.selected.id;
+        }
     },
+
+    drawPreview(selectedTileCoords) {
+        selectedTileCtx.fillStyle = 'AliceBlue';
+        selectedTileCtx.fillRect(0, 0, selectedTileCanvas.width, selectedTileCanvas.height);
+
+        selectedTileCtx.drawImage(
+            tilesetImg,
+            selectedTileCoords.x * TILE_SIZE, selectedTileCoords.y * TILE_SIZE,
+            TILE_SIZE, TILE_SIZE,
+            0, 0,
+            TILE_SIZE * 4, TILE_SIZE * 4,
+        );
+    },
+
+    updateForm() {
+        let tile = level1.tiles[this.selected.id];
+        let name, passable, isObj;
+
+        if (tile) {
+            name = tile.name;
+            passable = tile.pass;
+            isObj = tile.isObj;
+        }
+
+        document.getElementById('tile-name').value = name;
+        document.getElementById('tile-is-pass').checked = passable;
+        document.getElementById('tile-is-obj').checked = isObj;
+    },
+
+    updateTileDetails(form) {
+        const formData = new FormData(form);
+        const name = formData.get('tile-name');
+        const passable = formData.get('tile-is-pass');
+        const isObject = formData.get('tile-is-obj');
+
+        level1.tiles[this.selected.id] = {
+            name: name,
+            pass: passable,
+            isObj: isObject,
+            x: this.selected.coords.x,
+            y: this.selected.coords.y,
+        };
+    }
 };
+
+document.getElementById('selected-tile-form').addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    editor.updateTileDetails(event.target);
+    event.target.reset();
+})

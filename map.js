@@ -5,6 +5,9 @@ const map = {
                 const tileId = level.map[y][x];
                 const tile = level.tiles[tileId];
 
+                if (tile.x === undefined) {
+                    debugger;
+                }
                 const srcX = tile.x * TILE_SIZE;
                 const srcY = tile.y * TILE_SIZE;
 
