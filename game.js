@@ -10,6 +10,8 @@ tilesetImg.src = 'assets/tileset-dungeon.png';
 const url = new URL(window.location.href);
 const editorEnabled = url.searchParams.get('editor');
 
+let currentLevel = level1;
+
 if (!editorEnabled) {
     for (const editorElement in document.getElementById('editor')) {
         editorElement.style.display = 'none';
@@ -29,7 +31,7 @@ function draw(currentTime) {
     hero.move(deltaTime);
     gameCtx.fillStyle = '#040720';
     gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-    map.drawMap(level1);
+    map.drawMap(currentLevel);
     hero.draw();
     editorEnabled && editor.draw();
 }

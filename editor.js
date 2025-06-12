@@ -84,8 +84,8 @@ const editor = {
     updateSelectedTile(selectedTileCoords) {
         let selected = null;
 
-        for (let id in level1.tiles) {
-            const tile = level1.tiles[id];
+        for (let id in currentLevel.tiles) {
+            const tile = currentLevel.tiles[id];
             if (selectedTileCoords.x === tile.x && selectedTileCoords.y === tile.y) {
                 selected = { id: id, coords: selectedTileCoords };
             }
@@ -95,7 +95,7 @@ const editor = {
             selected = {
                 id: selectedTileCoords.x.toString(16) + selectedTileCoords.y.toString(16),
                 coords: selectedTileCoords,
-            }
+            };
         }
 
         this.selected = selected;
@@ -104,10 +104,10 @@ const editor = {
     },
 
     updateMap(coords) {
-        let tile = level1.tiles[this.selected.id];
+        let tile = currentLevel.tiles[this.selected.id];
 
         if (tile) {
-            level1.map[coords.y][coords.x] = this.selected.id;
+            currentLevel.map[coords.y][coords.x] = this.selected.id;
         }
     },
 
@@ -125,7 +125,7 @@ const editor = {
     },
 
     updateForm() {
-        let tile = level1.tiles[this.selected.id];
+        let tile = currentLevel.tiles[this.selected.id];
         let name, passable, isObj;
 
         if (tile) {
@@ -145,18 +145,71 @@ const editor = {
         const passable = formData.get('tile-is-pass');
         const isObject = formData.get('tile-is-obj');
 
-        level1.tiles[this.selected.id] = {
-            name: name,
-            pass: passable,
-            isObj: isObject,
+        currentLevel.tiles[this.selected.id] = {
+            name: name || 'unnamed',
+            pass: passable || false,
+            isObj: isObject || false,
             x: this.selected.coords.x,
             y: this.selected.coords.y,
         };
-    }
+    },
+
+    saveLevel(form) {
+        const jsonStr = JSON.stringify(currentLevel);
+
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+
+        const url = URL.createObjectURL(blob);
+        const formData = new FormData(form);
+        const levelName = formData.get('level-name') || 'unnamed-level.json';
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = levelName;
+        document.body.appendChild(a);
+
+        // Trigger the download
+        a.click();
+
+        // Clean up the revoked Blob URL
+        URL.revokeObjectURL(url);
+
+        // Remove the link element from the DOM
+        document.body.removeChild(a);
+    },
+
+    loadLevel() {
+        const fileInput = document.getElementById('load-level-file-input');
+        const file = fileInput.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onloadend = (event) => {
+                currentLevel = JSON.parse(event.target.result);
+            };
+
+            reader.onerror = (event) => {
+                console.error(event.target.result);
+            };
+
+            reader.readAsText(file);
+        }
+    },
 };
+
 
 document.getElementById('selected-tile-form').addEventListener('submit', (event) => {
     event.preventDefault(); // Prevent the default form submission
     editor.updateTileDetails(event.target);
     event.target.reset();
-})
+});
+document.getElementById('save-level-form').addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    editor.saveLevel(event.target);
+});
+
+document.getElementById('load-level-form').addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    editor.loadLevel();
+});
