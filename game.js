@@ -31,7 +31,7 @@ function draw(currentTime) {
     hero.move(deltaTime);
     gameCtx.fillStyle = '#040720';
     gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-    map.drawMap(currentLevel);
+    map.draw();
     hero.draw();
     editorEnabled && editor.draw();
 }

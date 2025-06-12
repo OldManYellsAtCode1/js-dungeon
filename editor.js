@@ -6,15 +6,19 @@ const selectedTileCtx = selectedTileCanvas.getContext('2d');
 
 const editor = {
     selected: null,
+    mouseDown: false,
 
     draw() {
+        let mouseReleased = this.mouseDown && !mouse.down;
+        this.mouseDown = mouse.down;
+
         this.drawTileSelector();
         let selectedTileCoords = this.getSelectedTileCoords(tileSelectorCanvas);
 
         if (selectedTileCoords !== null) {
             this.highlightSelectedTile(selectedTileCoords, tileSelectorCtx, 'Lime');
 
-            if (mouse.down) {
+            if (mouseReleased) {
                 this.updateSelectedTile(selectedTileCoords);
                 this.drawPreview(selectedTileCoords);
                 this.updateForm();
@@ -26,7 +30,7 @@ const editor = {
         if (gameCanvasTileCoordinates !== null) {
             this.highlightSelectedTile(gameCanvasTileCoordinates, gameCtx, 'Red');
 
-            if (mouse.down && this.selected !== null) {
+            if (mouseReleased && this.selected !== null) {
                 this.updateMap(gameCanvasTileCoordinates);
             }
         }
@@ -107,7 +111,13 @@ const editor = {
         let tile = currentLevel.tiles[this.selected.id];
 
         if (tile) {
-            currentLevel.map[coords.y][coords.x] = this.selected.id;
+            if (tile.isObj) {
+                currentLevel.objects.push(
+                    { id: this.selected.id, x: coords.x, y: coords.y },
+                );
+            } else {
+                currentLevel.map[coords.y][coords.x] = this.selected.id;
+            }
         }
     },
 
