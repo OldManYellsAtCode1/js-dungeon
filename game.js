@@ -1,5 +1,5 @@
 const TILE_SIZE = 32;
-const TILE_SELECTOR_SIZE = 512;
+const TILE_PICKER_SIZE = 512;
 
 const gameCanvas = document.getElementById('game-canvas');
 const gameCtx = gameCanvas.getContext('2d');
@@ -7,10 +7,10 @@ const gameCtx = gameCanvas.getContext('2d');
 const tilesetImg = new Image();
 tilesetImg.src = 'assets/tileset-dungeon.png';
 
+let currentLevel = level1;
+
 const url = new URL(window.location.href);
 const editorEnabled = url.searchParams.get('editor');
-
-let currentLevel = level1;
 
 if (!editorEnabled) {
     for (const editorElement in document.getElementById('editor')) {

@@ -27,7 +27,6 @@ const map = {
 
     drawObjects() {
         currentLevel.objects.forEach(obj => {
-            debugger;
             const tile = currentLevel.tiles[obj.id];
 
             const srcX = tile.x * TILE_SIZE;

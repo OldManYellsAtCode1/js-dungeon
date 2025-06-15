@@ -1,9 +1,11 @@
-const tileSelectorCanvas = document.getElementById('tile-selector-canvas');
-const tileSelectorCtx = tileSelectorCanvas.getContext('2d');
+const tilePickerCanvas = document.getElementById('tile-picker-canvas');
+const tilePickerCtx = tilePickerCanvas.getContext('2d');
 
 const selectedTileCanvas = document.getElementById('selected-tile-canvas');
 const selectedTileCtx = selectedTileCanvas.getContext('2d');
 
+const DELETE_TILE_ID = 'delete';
+const VOID_TILE_ID = '11';
 const editor = {
     selected: null,
     mouseDown: false,
@@ -12,11 +14,11 @@ const editor = {
         let mouseReleased = this.mouseDown && !mouse.down;
         this.mouseDown = mouse.down;
 
-        this.drawTileSelector();
-        let selectedTileCoords = this.getSelectedTileCoords(tileSelectorCanvas);
+        this.drawTilePicker();
+        let selectedTileCoords = this.getSelectedTileCoords(tilePickerCanvas);
 
         if (selectedTileCoords !== null) {
-            this.highlightSelectedTile(selectedTileCoords, tileSelectorCtx, 'Lime');
+            this.highlightSelectedTile(selectedTileCoords, tilePickerCtx, 'Lime');
 
             if (mouseReleased) {
                 this.updateSelectedTile(selectedTileCoords);
@@ -36,38 +38,38 @@ const editor = {
         }
     },
 
-    drawTileSelector() {
-        tileSelectorCtx.fillStyle = 'AliceBlue';
-        tileSelectorCtx.fillRect(0, 0, TILE_SELECTOR_SIZE, TILE_SELECTOR_SIZE);
+    drawTilePicker() {
+        tilePickerCtx.fillStyle = 'AliceBlue';
+        tilePickerCtx.fillRect(0, 0, TILE_PICKER_SIZE, TILE_PICKER_SIZE);
 
-        tileSelectorCtx.strokeStyle = 'Grey';
-        tileSelectorCtx.beginPath();
+        tilePickerCtx.strokeStyle = 'Grey';
+        tilePickerCtx.beginPath();
 
-        for (let i = 1; i < TILE_SELECTOR_SIZE / TILE_SIZE; i++) {
+        for (let i = 1; i < TILE_PICKER_SIZE / TILE_SIZE; i++) {
             //draw vertical lines
-            tileSelectorCtx.moveTo(i * TILE_SIZE, 0);
-            tileSelectorCtx.lineTo(i * TILE_SIZE, TILE_SELECTOR_SIZE);
+            tilePickerCtx.moveTo(i * TILE_SIZE, 0);
+            tilePickerCtx.lineTo(i * TILE_SIZE, TILE_PICKER_SIZE);
 
             //draw horizontal lines
-            tileSelectorCtx.moveTo(0, i * TILE_SIZE);
-            tileSelectorCtx.lineTo(TILE_SELECTOR_SIZE, i * TILE_SIZE);
+            tilePickerCtx.moveTo(0, i * TILE_SIZE);
+            tilePickerCtx.lineTo(TILE_PICKER_SIZE, i * TILE_SIZE);
         }
 
-        tileSelectorCtx.stroke();
+        tilePickerCtx.stroke();
 
-        tileSelectorCtx.drawImage(tilesetImg, 0, 0);
+        tilePickerCtx.drawImage(tilesetImg, 0, 0);
     },
 
     getSelectedTileCoords(canvas) {
-        const localX = mouse.x - canvas.offsetLeft;
-        const localY = mouse.y - canvas.offsetTop;
+        const canvasX = mouse.x - canvas.offsetLeft;
+        const canvasY = mouse.y - canvas.offsetTop;
 
-        if (localX > 0 && localX < canvas.width &&
-            localY > 0 && localY < canvas.height) {
+        if (canvasX > 0 && canvasX < canvas.width &&
+            canvasY > 0 && canvasY < canvas.height) {
 
             return {
-                x: Math.floor(localX / TILE_SIZE),
-                y: Math.floor(localY / TILE_SIZE),
+                x: Math.floor(canvasX / TILE_SIZE),
+                y: Math.floor(canvasY / TILE_SIZE),
             };
         }
 
@@ -103,15 +105,29 @@ const editor = {
         }
 
         this.selected = selected;
-
-        console.log(this.selected);
     },
 
     updateMap(coords) {
         let tile = currentLevel.tiles[this.selected.id];
 
         if (tile) {
-            if (tile.isObj) {
+            if (tile.name === DELETE_TILE_ID) {
+                let didDelete = false;
+
+                currentLevel.objects = currentLevel.objects.filter(obj => {
+                        let match = obj.x === coords.x && obj.y === coords.y;
+                        if (match) {
+                            didDelete = true;
+                        }
+
+                        return !match;
+                    }
+                );
+
+                if (!didDelete) {
+                    currentLevel.map[coords.y][coords.x] = VOID_TILE_ID;
+                }
+            } else if (tile.isObj) {
                 currentLevel.objects.push(
                     { id: this.selected.id, x: coords.x, y: coords.y },
                 );
