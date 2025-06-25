@@ -46,17 +46,18 @@ const editor = {
         tilePickerCtx.beginPath();
 
         for (let i = 1; i < TILE_PICKER_SIZE / TILE_SIZE; i++) {
-            //draw vertical lines
+            // Draw vertical lines
             tilePickerCtx.moveTo(i * TILE_SIZE, 0);
             tilePickerCtx.lineTo(i * TILE_SIZE, TILE_PICKER_SIZE);
 
-            //draw horizontal lines
+            // Draw horizontal lines
             tilePickerCtx.moveTo(0, i * TILE_SIZE);
             tilePickerCtx.lineTo(TILE_PICKER_SIZE, i * TILE_SIZE);
         }
 
         tilePickerCtx.stroke();
 
+        // Draw the tileset over the top
         tilePickerCtx.drawImage(tilesetImg, 0, 0);
     },
 
