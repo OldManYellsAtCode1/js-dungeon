@@ -1,30 +1,44 @@
 class Hero {
-    x = 400;
-    y = 320;
+    x = 110;
+    y = 110;
     speed = 120; // Speed is in pixels per second
+    height = 30;
+    width = 24;
     img = new Image();
 
     constructor() {
         this.img.src = './assets/knight-sheet.png';
     }
 
+    getBoundingBox(x, y) {
+        return {x: x, y: y, height: this.height, width: this.width};
+    }
+
     move(deltaTime) {
         const movement = (this.speed * deltaTime) / 1000;
 
         if (keys.get('ArrowRight')) {
-            this.x += movement;
+            if(!util.detectMapCollision(this.getBoundingBox(this.x + movement, this.y))) {
+                this.x += movement;
+            }
         }
 
         if (keys.get('ArrowLeft')) {
-            this.x -= movement;
+            if(!util.detectMapCollision(this.getBoundingBox(this.x - movement, this.y))) {
+                this.x -= movement;
+            }
         }
 
         if (keys.get('ArrowUp')) {
-            this.y -= movement;
+            if(!util.detectMapCollision(this.getBoundingBox(this.x, this.y - movement))) {
+                this.y -= movement;
+            }
         }
 
         if (keys.get('ArrowDown')) {
-            this.y += movement;
+            if(!util.detectMapCollision(this.getBoundingBox(this.x, this.y + movement))) {
+                this.y += movement;
+            }
         }
     }
 

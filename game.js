@@ -13,7 +13,7 @@ const url = new URL(window.location.href);
 const editorEnabled = url.searchParams.get('editor');
 
 if (!editorEnabled) {
-    for (const editorElement in document.getElementById('editor')) {
+    for (const editorElement of document.getElementsByClassName('editor')) {
         editorElement.style.display = 'none';
     }
 }
@@ -28,10 +28,10 @@ function draw(currentTime) {
 
     requestAnimationFrame(draw);
 
-    hero.move(deltaTime);
     gameCtx.fillStyle = '#040720';
     gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
     map.draw();
+    hero.move(deltaTime);
     hero.draw();
     editorEnabled && editor.draw();
 }
