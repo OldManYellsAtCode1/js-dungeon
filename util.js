@@ -41,6 +41,32 @@ let util = {
         return false;
     },
 
+    detectObjectCollision(boundingBox) {
+        const OBJECT_SCALE_FACTOR = 0.8;
+        const OBJECT_SCALED_OFFSET = (1 - OBJECT_SCALE_FACTOR) * TILE_SIZE;
+
+        for (const levelObject of currentLevel.objects) {
+            const tile = currentLevel.tiles[levelObject.id];
+
+            const levelObjectBoundingBox = {
+                x: (levelObject.x * TILE_SIZE) + OBJECT_SCALED_OFFSET,
+                y: (levelObject.y * TILE_SIZE) + OBJECT_SCALED_OFFSET,
+                width: TILE_SIZE - (2 * OBJECT_SCALED_OFFSET),
+                height: TILE_SIZE - (2 * OBJECT_SCALED_OFFSET),
+            }
+
+            if (this.detectAABBCollision(levelObjectBoundingBox, boundingBox)) {
+                console.log(currentLevel.tiles[levelObject.id]);
+
+                if (!tile.pass) {
+                    return levelObject;
+                }
+            }
+        }
+
+        return false;
+    },
+
     detectMapCollision(boundingBox) {
         const mapRow = Math.floor(boundingBox.y / TILE_SIZE);
         const mapCol = Math.floor(boundingBox.x / TILE_SIZE);
@@ -48,6 +74,7 @@ let util = {
         return this.detectTileCollision(mapRow, mapCol, boundingBox)
             || this.detectTileCollision(mapRow + 1, mapCol, boundingBox)
             || this.detectTileCollision(mapRow, mapCol + 1, boundingBox)
-            || this.detectTileCollision(mapRow + 1, mapCol + 1, boundingBox);
+            || this.detectTileCollision(mapRow + 1, mapCol + 1, boundingBox)
+            || this.detectObjectCollision(boundingBox)
     },
 }
