@@ -32,7 +32,7 @@ function draw(currentTime) {
     gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
     map.draw();
     hero.move(deltaTime);
-    hero.draw();
+    hero.draw(deltaTime);
     editorEnabled && editor.draw();
 }
 

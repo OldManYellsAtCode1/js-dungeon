@@ -1,10 +1,11 @@
 let util = {
     detectAABBCollision(boundingBoxA, boundingBoxB) {
-        gameCtx.strokeStyle = 'red';
-        gameCtx.strokeRect(boundingBoxA.x, boundingBoxA.y, boundingBoxA.width, boundingBoxA.height);
-
-        gameCtx.strokeStyle = 'green';
-        gameCtx.strokeRect(boundingBoxB.x, boundingBoxB.y, boundingBoxB.width, boundingBoxB.height);
+        // TODO - make this a URL param
+        // gameCtx.strokeStyle = 'red';
+        // gameCtx.strokeRect(boundingBoxA.x, boundingBoxA.y, boundingBoxA.width, boundingBoxA.height);
+        //
+        // gameCtx.strokeStyle = 'green';
+        // gameCtx.strokeRect(boundingBoxB.x, boundingBoxB.y, boundingBoxB.width, boundingBoxB.height);
 
         const AisToTheRightOfB = boundingBoxA.x > boundingBoxB.x + boundingBoxB.width;
         const AisToTheLeftOfB = boundingBoxA.x + boundingBoxA.width < boundingBoxB.x;
@@ -31,7 +32,7 @@ let util = {
                 y: mapRow * TILE_SIZE,
                 width: TILE_SIZE,
                 height: TILE_SIZE,
-            }
+            };
 
             if (this.detectAABBCollision(tileBoundingBox, objectBoundingBox)) {
                 return tile;
@@ -53,10 +54,11 @@ let util = {
                 y: (levelObject.y * TILE_SIZE) + OBJECT_SCALED_OFFSET,
                 width: TILE_SIZE - (2 * OBJECT_SCALED_OFFSET),
                 height: TILE_SIZE - (2 * OBJECT_SCALED_OFFSET),
-            }
+            };
 
             if (this.detectAABBCollision(levelObjectBoundingBox, boundingBox)) {
-                console.log(currentLevel.tiles[levelObject.id]);
+                // TODO - add debug param
+                // console.log(currentLevel.tiles[levelObject.id]);
 
                 if (!tile.pass) {
                     return levelObject;
@@ -75,6 +77,6 @@ let util = {
             || this.detectTileCollision(mapRow + 1, mapCol, boundingBox)
             || this.detectTileCollision(mapRow, mapCol + 1, boundingBox)
             || this.detectTileCollision(mapRow + 1, mapCol + 1, boundingBox)
-            || this.detectObjectCollision(boundingBox)
+            || this.detectObjectCollision(boundingBox);
     },
-}
+};

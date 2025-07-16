@@ -40,6 +40,6 @@ const map = {
                 srcX, srcY, TILE_SIZE, TILE_SIZE, // Source section on tileset canvas
                 dstX, dstY, TILE_SIZE, TILE_SIZE, // Destination on game canvas
             );
-        })
+        });
     },
 };
