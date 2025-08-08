@@ -285,7 +285,7 @@ class StaticImageSystem extends AbstractSystem {
 }
 
 
-// The main Entity Component System - manages entities and systems
+// The Entity Component System - manages entities and systems
 class ECS {
     constructor() {
         this.entities = [];
@@ -304,7 +304,7 @@ class ECS {
     }
 
     update(deltaTime) {
-        this.systems.forEach(system => { // TODO - is passing in entities here a hack?
+        this.systems.forEach(system => {
             system.update(this.entities, deltaTime);
         });
     }

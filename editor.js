@@ -130,7 +130,7 @@ const editor = {
                 }
             } else if (tile.isObj) {
                 currentLevel.objects.push(
-                    { id: this.selected.id, x: coords.x, y: coords.y },
+                    { type: 'tile', id: this.selected.id, x: coords.x, y: coords.y },
                 );
             } else {
                 currentLevel.map[coords.y][coords.x] = this.selected.id;

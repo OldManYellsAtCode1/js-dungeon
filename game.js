@@ -4,11 +4,11 @@ const TILE_PICKER_SIZE = 512;
 const gameCanvas = document.getElementById('game-canvas');
 const gameCtx = gameCanvas.getContext('2d');
 
-const tilesetImg = new Image();
-tilesetImg.src = 'assets/tileset-dungeon.png';
-
 const knightImg = new Image();
 knightImg.src = './assets/knight-sheet.png';
+
+const tilesetImg = new Image();
+tilesetImg.src = 'assets/tileset-dungeon.png';
 
 let currentLevel = level1;
 
@@ -23,43 +23,7 @@ if (!editorEnabled) {
 
 let lastTime = 0;
 
-const positionComp = new Position(110, 140);
-const sizeComp = new Size(24, 28);
-const directionComp = new Direction(null);
-const keyboardControls = new Map();
-keyboardControls.set('ArrowRight', USER_COMMANDS.RIGHT);
-keyboardControls.set('ArrowLeft', USER_COMMANDS.LEFT);
-keyboardControls.set('ArrowUp', USER_COMMANDS.UP);
-keyboardControls.set('ArrowDown', USER_COMMANDS.DOWN);
-keyboardControls.set('Space', USER_COMMANDS.ATTACK);
-
-const keyboardControlsComp = new KeyboardControls(keyboardControls);
-const movement = new Movement(120);
-const animationData = new Map();
-animationData.set(STATE.IDLE, { frames: 4, row: 0, speed: 1 });
-animationData.set(STATE.WALK, { frames: 6, row: 1, speed: 1 });
-animationData.set(STATE.ATTACK, { frames: 3, row: 2, speed: 3 });
-
-const animations = new Animations(
-    knightImg,
-    animationData,
-    animationData.get(STATE.IDLE),
-    27,
-    22,
-    40,
-    32,
-);
-
-
 const world = new ECS();
-
-const heroEntity = world.createEntity();
-heroEntity.addComponent(positionComp);
-heroEntity.addComponent(directionComp);
-heroEntity.addComponent(keyboardControlsComp);
-heroEntity.addComponent(movement);
-heroEntity.addComponent(animations);
-heroEntity.addComponent(sizeComp);
 
 world.addSystem(new PlayerControlSystem());
 world.addSystem(new MovementSystem());
