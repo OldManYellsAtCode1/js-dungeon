@@ -57,7 +57,9 @@ class Direction {
 }
 
 class KeyboardControls {
-
+    constructor(keyboardControls) {
+        this.keyboardControls = keyboardControls;
+    }
 }
 
 class Animations {
@@ -109,44 +111,48 @@ class PlayerControlSystem extends AbstractSystem {
     constructor() {
         super();
         this.requiredComponents = [KeyboardControls, Position, Direction, Animations, Movement];
+
+        let actions = new Map();
+        actions.set(USER_COMMANDS.RIGHT, (movementComp, directionComp, animationComp) => {
+            movementComp.horizontalVelocity = VELOCITY.HORIZONTAL.RIGHT;
+            directionComp.currentDirection = DIRECTION.RIGHT;
+            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
+        });
+        actions.set(USER_COMMANDS.LEFT, (movementComp, directionComp, animationComp) => {
+            movementComp.horizontalVelocity = VELOCITY.HORIZONTAL.LEFT;
+            directionComp.currentDirection = DIRECTION.LEFT;
+            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
+        });
+        actions.set(USER_COMMANDS.UP, (movementComp, directionComp, animationComp) => {
+            movementComp.veriticalVelocity = VELOCITY.VERTICAL.UP;
+            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
+        });
+        actions.set(USER_COMMANDS.DOWN, (movementComp, directionComp, animationComp) => {
+            movementComp.veriticalVelocity = VELOCITY.VERTICAL.DOWN;
+            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
+        });
+        actions.set(USER_COMMANDS.ATTACK, (movementComp, directionComp, animationComp) => {
+            animationComp.currentAnimation = animationComp.animations.get(STATE.ATTACK);
+        });
+
+        this.actions = actions;
     }
 
     updateForEntity(entity) {
         const movementComp = entity.getComponent(Movement);
         const directionComp = entity.getComponent(Direction);
         const animationComp = entity.getComponent(Animations);
+        const keyboardControlComp = entity.getComponent(KeyboardControls);
 
         movementComp.horizontalVelocity = VELOCITY.HORIZONTAL.NONE;
         movementComp.veriticalVelocity = VELOCITY.VERTICAL.NONE;
         animationComp.currentAnimation = animationComp.animations.get(STATE.IDLE);
 
-        if (keys.get('ArrowRight')) {
-            movementComp.horizontalVelocity = VELOCITY.HORIZONTAL.RIGHT;
-            directionComp.currentDirection = DIRECTION.RIGHT;
-            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
+        for (const [control, action] of keyboardControlComp.keyboardControls) {
+            if (keys.get(control)) {
+                this.actions.get(action)(movementComp, directionComp, animationComp);
+            }
         }
-
-        if (keys.get('ArrowLeft')) {
-            movementComp.horizontalVelocity = VELOCITY.HORIZONTAL.LEFT;
-            directionComp.currentDirection = DIRECTION.LEFT;
-            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
-        }
-
-        if (keys.get('ArrowUp')) {
-            movementComp.veriticalVelocity = VELOCITY.VERTICAL.UP;
-            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
-        }
-
-        if (keys.get('ArrowDown')) {
-            movementComp.veriticalVelocity = VELOCITY.VERTICAL.DOWN;
-            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
-        }
-
-        if (keys.get('Space')) {
-            animationComp.currentAnimation = animationComp.animations.get(STATE.ATTACK);
-        }
-
-        // console.log(movementComp.velocity + directionComp.direction + animationComp.currentAnimation);
     }
 }
 

@@ -21,3 +21,11 @@ const STATE = {
     WALK: 'WALK',
     ATTACK: 'ATTACK',
 };
+
+const USER_COMMANDS = {
+    LEFT: 'LEFT',
+    RIGHT: 'RIGHT',
+    UP: 'UP',
+    DOWN: 'DOWN',
+    ATTACK: 'ATTACK',
+};
