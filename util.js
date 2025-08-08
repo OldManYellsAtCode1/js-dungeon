@@ -1,11 +1,11 @@
 let util = {
     detectAABBCollision(boundingBoxA, boundingBoxB) {
         // TODO - make this a URL param
-        // gameCtx.strokeStyle = 'red';
-        // gameCtx.strokeRect(boundingBoxA.x, boundingBoxA.y, boundingBoxA.width, boundingBoxA.height);
-        //
-        // gameCtx.strokeStyle = 'green';
-        // gameCtx.strokeRect(boundingBoxB.x, boundingBoxB.y, boundingBoxB.width, boundingBoxB.height);
+        gameCtx.strokeStyle = 'red';
+        gameCtx.strokeRect(boundingBoxA.x, boundingBoxA.y, boundingBoxA.width, boundingBoxA.height);
+
+        gameCtx.strokeStyle = 'green';
+        gameCtx.strokeRect(boundingBoxB.x, boundingBoxB.y, boundingBoxB.width, boundingBoxB.height);
 
         const AisToTheRightOfB = boundingBoxA.x > boundingBoxB.x + boundingBoxB.width;
         const AisToTheLeftOfB = boundingBoxA.x + boundingBoxA.width < boundingBoxB.x;
@@ -42,26 +42,24 @@ let util = {
         return false;
     },
 
-    detectObjectCollision(boundingBox) {
-        const OBJECT_SCALE_FACTOR = 0.8;
-        const OBJECT_SCALED_OFFSET = (1 - OBJECT_SCALE_FACTOR) * TILE_SIZE;
+    detectObjectCollision(boundingBox, obstacles) {
+        for (const obstacle of obstacles) {
+            const positionComp = obstacle.getComponent(Position);
+            const sizeComp = obstacle.getComponent(Size);
 
-        for (const levelObject of currentLevel.objects) {
-            const tile = currentLevel.tiles[levelObject.id];
+            const obstacleBoundingBox = {
+                x: positionComp.x,
+                y: positionComp.y,
+                width: sizeComp.width,
+                height: sizeComp.height,
+            }
 
-            const levelObjectBoundingBox = {
-                x: (levelObject.x * TILE_SIZE) + OBJECT_SCALED_OFFSET,
-                y: (levelObject.y * TILE_SIZE) + OBJECT_SCALED_OFFSET,
-                width: TILE_SIZE - (2 * OBJECT_SCALED_OFFSET),
-                height: TILE_SIZE - (2 * OBJECT_SCALED_OFFSET),
-            };
-
-            if (this.detectAABBCollision(levelObjectBoundingBox, boundingBox)) {
+            if (this.detectAABBCollision(obstacleBoundingBox, boundingBox)) {
                 // TODO - add debug param
                 // console.log(currentLevel.tiles[levelObject.id]);
 
-                if (!tile.pass) {
-                    return levelObject;
+                if (!sizeComp.passable) {
+                    return obstacle;
                 }
             }
         }
@@ -76,7 +74,6 @@ let util = {
         return this.detectTileCollision(mapRow, mapCol, boundingBox)
             || this.detectTileCollision(mapRow + 1, mapCol, boundingBox)
             || this.detectTileCollision(mapRow, mapCol + 1, boundingBox)
-            || this.detectTileCollision(mapRow + 1, mapCol + 1, boundingBox)
-            || this.detectObjectCollision(boundingBox);
+            || this.detectTileCollision(mapRow + 1, mapCol + 1, boundingBox);
     },
 };
