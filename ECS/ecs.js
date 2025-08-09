@@ -32,8 +32,11 @@ class Position {
 }
 
 // Used for collision detection. See Animation for display size.
-class Size {
-    constructor(width = 0, height = 0, passable = true) {
+// Offset is from Position component
+class BoundingBox {
+    constructor(offsetX = 0, offsetY = 0, width = 0, height = 0, passable = true) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
         this.width = width;
         this.height = height;
         this.passable = passable;
@@ -159,8 +162,8 @@ class PlayerControlSystem extends AbstractSystem {
 class MovementSystem extends AbstractSystem {
     constructor() {
         super();
-        this.requiredComponents = [Position, Movement, Size];
-        this.obstacleComponents = [Position, Size];
+        this.requiredComponents = [Position, Movement, BoundingBox];
+        this.obstacleComponents = [Position, BoundingBox];
         this.obstacles = [];
     }
 
@@ -177,7 +180,7 @@ class MovementSystem extends AbstractSystem {
     updateForEntity(entity, deltaTime) {
         const positionComp = entity.getComponent(Position);
         const movementComp = entity.getComponent(Movement);
-        const sizeComp = entity.getComponent(Size);
+        const boundingBoxComp = entity.getComponent(BoundingBox);
 
         let nextPos = { x: positionComp.x, y: positionComp.y };
         const increment = (movementComp.speed * deltaTime) / 1000;
@@ -199,10 +202,10 @@ class MovementSystem extends AbstractSystem {
         }
 
         let boundingBox = {
-            x: nextPos.x,
-            y: nextPos.y,
-            width: sizeComp.width,
-            height: sizeComp.height,
+            x: nextPos.x + boundingBoxComp.offsetX,
+            y: nextPos.y + boundingBoxComp.offsetY,
+            width: boundingBoxComp.width,
+            height: boundingBoxComp.height,
         };
 
         if (!util.detectMapCollision(boundingBox) &&

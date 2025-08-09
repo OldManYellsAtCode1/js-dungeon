@@ -45,20 +45,20 @@ let util = {
     detectObjectCollision(boundingBox, obstacles) {
         for (const obstacle of obstacles) {
             const positionComp = obstacle.getComponent(Position);
-            const sizeComp = obstacle.getComponent(Size);
+            const boundingBoxComp = obstacle.getComponent(BoundingBox);
 
             const obstacleBoundingBox = {
-                x: positionComp.x,
-                y: positionComp.y,
-                width: sizeComp.width,
-                height: sizeComp.height,
+                x: positionComp.x + boundingBoxComp.offsetX,
+                y: positionComp.y + boundingBoxComp.offsetY,
+                width: boundingBoxComp.width,
+                height: boundingBoxComp.height,
             }
 
             if (this.detectAABBCollision(obstacleBoundingBox, boundingBox)) {
                 // TODO - add debug param
                 // console.log(currentLevel.tiles[levelObject.id]);
 
-                if (!sizeComp.passable) {
+                if (!boundingBoxComp.passable) {
                     return obstacle;
                 }
             }

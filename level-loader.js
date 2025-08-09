@@ -19,7 +19,7 @@ let levelLoader = (level, ecs) => {
         const tile = level.tiles[entity.id];
 
         const positionComp = new Position(entity.x * TILE_SIZE, entity.y * TILE_SIZE);
-        const sizeComp = new Size(25, 25, tile.pass);
+        const sizeComp = new BoundingBox(3, 3, 26, 26, tile.pass);
 
         if (!tile) {
             console.error(`Tile ${entity.id} not found`);
