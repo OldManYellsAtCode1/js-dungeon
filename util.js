@@ -1,11 +1,11 @@
 let util = {
     detectAABBCollision(boundingBoxA, boundingBoxB) {
         // TODO - make this a URL param
-        gameCtx.strokeStyle = 'red';
-        gameCtx.strokeRect(boundingBoxA.x, boundingBoxA.y, boundingBoxA.width, boundingBoxA.height);
-
-        gameCtx.strokeStyle = 'green';
-        gameCtx.strokeRect(boundingBoxB.x, boundingBoxB.y, boundingBoxB.width, boundingBoxB.height);
+        // gameCtx.strokeStyle = 'red';
+        // gameCtx.strokeRect(boundingBoxA.x, boundingBoxA.y, boundingBoxA.width, boundingBoxA.height);
+        //
+        // gameCtx.strokeStyle = 'green';
+        // gameCtx.strokeRect(boundingBoxB.x, boundingBoxB.y, boundingBoxB.width, boundingBoxB.height);
 
         const AisToTheRightOfB = boundingBoxA.x > boundingBoxB.x + boundingBoxB.width;
         const AisToTheLeftOfB = boundingBoxA.x + boundingBoxA.width < boundingBoxB.x;

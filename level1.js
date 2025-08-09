@@ -69,6 +69,10 @@ const level1 = {
         'type': 'player',
         'x': 160,
         'y': 160,
+    },{
+        'type': 'slime',
+        'x': 200,
+        'y': 240,
     }, {
         'type': 'tile',
         'id': '52',

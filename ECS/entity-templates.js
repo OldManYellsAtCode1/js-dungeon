@@ -27,6 +27,23 @@ let entityTemplates = {
         );
     },
 
+    getSlimeAnimations: () => {
+        const animationData = new Map();
+        animationData.set(STATE.IDLE, { frames: 4, row: 0, speed: 1 });
+        animationData.set(STATE.WALK, { frames: 3, row: 2, speed: 2 });
+        animationData.set(STATE.ATTACK, { frames: 3, row: 2, speed: 3 });
+
+        return new Animations(
+            slimeImg,
+            animationData,
+            animationData.get(STATE.IDLE),
+            24,
+            24,
+            24,
+            24,
+        );
+    },
+
     "player": (data) => {
         const positionComp = new Position(data.x, data.y);
         const sizeComp = new BoundingBox(4, 4, 20, 24);
@@ -42,6 +59,22 @@ let entityTemplates = {
         heroEntity.addComponent(movementComp);
         heroEntity.addComponent(animationsComp);
         heroEntity.addComponent(sizeComp);
-    }
+    },
 
+    "slime": (data) => {
+        const positionComp = new Position(data.x, data.y);
+        const sizeComp = new BoundingBox(5, 5, 16, 16);
+        const directionComp = new Direction(null);
+        const movementComp = new Movement(80);
+        const aiControlComp = new AIControl(); // TODO - add system
+        const animationsComp = entityTemplates.getSlimeAnimations();
+
+        const heroEntity = world.createEntity();
+        heroEntity.addComponent(positionComp);
+        heroEntity.addComponent(directionComp);
+        heroEntity.addComponent(movementComp);
+        heroEntity.addComponent(aiControlComp);
+        heroEntity.addComponent(animationsComp);
+        heroEntity.addComponent(sizeComp);
+    }
 }
