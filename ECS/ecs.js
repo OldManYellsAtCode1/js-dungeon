@@ -311,4 +311,8 @@ class ECS {
             system.update(this.entities, deltaTime);
         });
     }
+
+    resetEntities() {
+        this.entities = [];
+    }
 }

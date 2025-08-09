@@ -1,21 +1,19 @@
-let levelLoader = (level, ecs) => {
-    tilesetImg.onload = () => {
-        for (const entity of level.entities) {
-            switch (entity.type) {
-                case 'tile' : {
-                    loadTile(entity);
-                    break;
-                }
+function loadLevel(level, ecs) {
+    for (const entity of level.entities) {
+        switch (entity.type) {
+            case 'tile' : {
+                loadTile(entity);
+                break;
+            }
 
-                default : {
-                    entityTemplates[entity.type](entity);
-                    break;
-                }
+            default : {
+                entityTemplates[entity.type](entity);
+                break;
             }
         }
-    };
+    }
 
-    let loadTile = (entity) => {
+    function loadTile(entity) {
         const tile = level.tiles[entity.id];
 
         const positionComp = new Position(entity.x * TILE_SIZE, entity.y * TILE_SIZE);
@@ -34,5 +32,5 @@ let levelLoader = (level, ecs) => {
         objEntity.addComponent(positionComp);
         objEntity.addComponent(sizeComp);
         objEntity.addComponent(staticImage);
-    };
-};
+    }
+}

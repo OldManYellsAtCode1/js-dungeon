@@ -52,7 +52,7 @@ let util = {
                 y: positionComp.y + boundingBoxComp.offsetY,
                 width: boundingBoxComp.width,
                 height: boundingBoxComp.height,
-            }
+            };
 
             if (this.detectAABBCollision(obstacleBoundingBox, boundingBox)) {
                 // TODO - add debug param
@@ -75,5 +75,18 @@ let util = {
             || this.detectTileCollision(mapRow + 1, mapCol, boundingBox)
             || this.detectTileCollision(mapRow, mapCol + 1, boundingBox)
             || this.detectTileCollision(mapRow + 1, mapCol + 1, boundingBox);
+    },
+
+    loadImages(imagesWithPaths) {
+        const loadPromises = imagesWithPaths.map(([img, path]) => {
+            return new Promise((resolve, reject) => {
+                img.src = path;
+
+                img.onload = () => resolve();
+                img.onerror = () => reject(new Error(`Failed to load image at ${path}`));
+            });
+        });
+
+        return Promise.all(loadPromises);
     },
 };

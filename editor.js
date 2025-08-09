@@ -115,7 +115,7 @@ const editor = {
             if (tile.name === DELETE_TILE_ID) {
                 let didDelete = false;
 
-                currentLevel.objects = currentLevel.objects.filter(obj => {
+                currentLevel.entities = currentLevel.entities.filter(obj => {
                         let match = obj.x === coords.x && obj.y === coords.y;
                         if (match) {
                             didDelete = true;
@@ -129,9 +129,12 @@ const editor = {
                     currentLevel.map[coords.y][coords.x] = VOID_TILE_ID;
                 }
             } else if (tile.isObj) {
-                currentLevel.objects.push(
+                currentLevel.entities.push(
                     { type: 'tile', id: this.selected.id, x: coords.x, y: coords.y },
                 );
+
+                world.resetEntities();
+                loadLevel(currentLevel, world);
             } else {
                 currentLevel.map[coords.y][coords.x] = this.selected.id;
             }

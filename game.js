@@ -5,10 +5,7 @@ const gameCanvas = document.getElementById('game-canvas');
 const gameCtx = gameCanvas.getContext('2d');
 
 const knightImg = new Image();
-knightImg.src = './assets/knight-sheet.png';
-
 const tilesetImg = new Image();
-tilesetImg.src = 'assets/tileset-dungeon.png';
 
 let currentLevel = level1;
 
@@ -24,13 +21,20 @@ if (!editorEnabled) {
 let lastTime = 0;
 
 const world = new ECS();
-
 world.addSystem(new PlayerControlSystem());
 world.addSystem(new MovementSystem());
 world.addSystem(new StaticImageSystem());
 world.addSystem(new AnimationSystem());
 
-levelLoader(currentLevel, world);
+util.loadImages(
+    [
+        [knightImg, './assets/knight-sheet.png'],
+        [tilesetImg, './assets/tileset-dungeon.png'],
+    ],
+).then(() => {
+    loadLevel(currentLevel, world);
+    requestAnimationFrame(draw);
+});
 
 function draw(currentTime) {
     let deltaTime = currentTime - lastTime;
@@ -44,5 +48,3 @@ function draw(currentTime) {
     editorEnabled && editor.draw();
     world.update(deltaTime);
 }
-
-requestAnimationFrame(draw);

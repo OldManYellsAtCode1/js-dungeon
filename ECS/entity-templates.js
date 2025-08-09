@@ -29,7 +29,7 @@ let entityTemplates = {
 
     "player": (data) => {
         const positionComp = new Position(data.x, data.y);
-        const sizeComp = new BoundingBox(2, 2, 20, 24);
+        const sizeComp = new BoundingBox(4, 4, 20, 24);
         const directionComp = new Direction(null);
         const movementComp = new Movement(120);
         const keyboardControlsComp = entityTemplates.getPlayerControls();
