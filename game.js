@@ -7,6 +7,7 @@ const gameCtx = gameCanvas.getContext('2d');
 const knightImg = new Image();
 const tilesetImg = new Image();
 const slimeImg = new Image();
+const batImg = new Image();
 
 let currentLevel = level1;
 
@@ -33,6 +34,7 @@ util.loadImages(
         [knightImg, './assets/knight-sheet.png'],
         [tilesetImg, './assets/tileset-dungeon.png'],
         [slimeImg, './assets/slime.png'],
+        [batImg, './assets/bat.png'],
     ],
 ).then(() => {
     loadLevel(currentLevel, world);

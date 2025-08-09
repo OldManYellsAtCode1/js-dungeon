@@ -29,3 +29,8 @@ const USER_COMMANDS = {
     DOWN: 'DOWN',
     ATTACK: 'ATTACK',
 };
+
+const AI_TYPE = {
+    RANDOM: 'RANDOM',
+    CLOSE_ATTACK: 'CLOSE_ATTACK',
+}

@@ -69,62 +69,6 @@ class PlayerControlSystem extends AbstractSystem {
     }
 }
 
-class AIControlSystem extends AbstractSystem {
-    constructor() {
-        super();
-        this.requiredComponents = [AIControl, Position, Direction, Animations, Movement];
-    }
-
-    updateForEntity(entity, deltaTime) {
-        const movementComp = entity.getComponent(Movement);
-        const directionComp = entity.getComponent(Direction);
-        const animationComp = entity.getComponent(Animations);
-        const aiControlComp = entity.getComponent(AIControl);
-
-        aiControlComp.movementTimer += deltaTime;
-
-        if (aiControlComp.movementTimer < 1000) {
-            return;
-        }
-
-        aiControlComp.movementTimer = 0;
-
-        let horizontalDirection;
-        let verticalDirection;
-
-        const horizontalSeed = Math.floor(Math.random() * 3);
-        const verticalSeed = Math.floor(Math.random() * 3);
-
-        if (horizontalSeed === 0) {
-            horizontalDirection = VELOCITY.HORIZONTAL.NONE;
-        } else if (horizontalSeed === 1) {
-            horizontalDirection = VELOCITY.HORIZONTAL.LEFT;
-            directionComp.currentDirection = DIRECTION.LEFT;
-        } else if (horizontalSeed === 2) {
-            horizontalDirection = VELOCITY.HORIZONTAL.RIGHT;
-            directionComp.currentDirection = DIRECTION.RIGHT;
-        }
-
-        if (verticalSeed === 0) {
-            verticalDirection = VELOCITY.VERTICAL.NONE;
-        } else if (verticalSeed === 1) {
-            verticalDirection = VELOCITY.VERTICAL.UP;
-        } else if (verticalSeed === 2) {
-            verticalDirection = VELOCITY.VERTICAL.DOWN;
-        }
-
-        movementComp.veriticalVelocity = verticalDirection;
-        movementComp.horizontalVelocity = horizontalDirection;
-
-        if (horizontalDirection === VELOCITY.VERTICAL.NONE
-            && verticalDirection === VELOCITY.VERTICAL.NONE) {
-            animationComp.currentAnimation = animationComp.animations.get(STATE.IDLE);
-        } else { // TODO - should there be a system to match animations to movement?
-            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
-        }
-    }
-}
-
 class MovementSystem extends AbstractSystem {
     constructor() {
         super();

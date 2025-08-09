@@ -44,6 +44,23 @@ let entityTemplates = {
         );
     },
 
+    getBatAnimations: () => {
+        const animationData = new Map();
+        animationData.set(STATE.IDLE, { frames: 4, row: 0, speed: 1 });
+        animationData.set(STATE.WALK, { frames: 4, row: 0, speed: 2 });
+        animationData.set(STATE.ATTACK, { frames: 4, row: 0, speed: 3 });
+
+        return new Animations(
+            batImg,
+            animationData,
+            animationData.get(STATE.IDLE),
+            16,
+            16,
+            16,
+            16,
+        );
+    },
+
     "player": (data) => {
         const positionComp = new Position(data.x, data.y);
         const sizeComp = new BoundingBox(4, 4, 20, 24);
@@ -66,8 +83,25 @@ let entityTemplates = {
         const sizeComp = new BoundingBox(5, 5, 16, 16);
         const directionComp = new Direction(null);
         const movementComp = new Movement(80);
-        const aiControlComp = new AIControl(); // TODO - add system
+        const aiControlComp = new AIControl(AI_TYPE.RANDOM);
         const animationsComp = entityTemplates.getSlimeAnimations();
+
+        const heroEntity = world.createEntity();
+        heroEntity.addComponent(positionComp);
+        heroEntity.addComponent(directionComp);
+        heroEntity.addComponent(movementComp);
+        heroEntity.addComponent(aiControlComp);
+        heroEntity.addComponent(animationsComp);
+        heroEntity.addComponent(sizeComp);
+    },
+
+    "bat": (data) => {
+        const positionComp = new Position(data.x, data.y);
+        const sizeComp = new BoundingBox(2, 2, 12, 12);
+        const directionComp = new Direction(null);
+        const movementComp = new Movement(50);
+        const aiControlComp = new AIControl(AI_TYPE.CLOSE_ATTACK);
+        const animationsComp = entityTemplates.getBatAnimations();
 
         const heroEntity = world.createEntity();
         heroEntity.addComponent(positionComp);
