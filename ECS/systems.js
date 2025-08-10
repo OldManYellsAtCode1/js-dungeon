@@ -23,29 +23,29 @@ class AbstractSystem {
 class PlayerControlSystem extends AbstractSystem {
     constructor() {
         super();
-        this.requiredComponents = [KeyboardControls, Position, Direction, Animations, Movement];
+        this.requiredComponents = [KeyboardControls, Position, Direction, Movement, Action];
 
         let actions = new Map();
-        actions.set(USER_COMMANDS.RIGHT, (movementComp, directionComp, animationComp) => {
+        actions.set(USER_COMMANDS.RIGHT, (movementComp, directionComp, actionComp) => {
             movementComp.horizontalVelocity = VELOCITY.HORIZONTAL.RIGHT;
             directionComp.currentDirection = DIRECTION.RIGHT;
-            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
+            actionComp.action = ACTION.WALK;
         });
-        actions.set(USER_COMMANDS.LEFT, (movementComp, directionComp, animationComp) => {
+        actions.set(USER_COMMANDS.LEFT, (movementComp, directionComp, actionComp) => {
             movementComp.horizontalVelocity = VELOCITY.HORIZONTAL.LEFT;
             directionComp.currentDirection = DIRECTION.LEFT;
-            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
+            actionComp.action = ACTION.WALK;
         });
-        actions.set(USER_COMMANDS.UP, (movementComp, directionComp, animationComp) => {
+        actions.set(USER_COMMANDS.UP, (movementComp, directionComp, actionComp) => {
             movementComp.veriticalVelocity = VELOCITY.VERTICAL.UP;
-            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
+            actionComp.action = ACTION.WALK;
         });
-        actions.set(USER_COMMANDS.DOWN, (movementComp, directionComp, animationComp) => {
+        actions.set(USER_COMMANDS.DOWN, (movementComp, directionComp, actionComp) => {
             movementComp.veriticalVelocity = VELOCITY.VERTICAL.DOWN;
-            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
+            actionComp.action = ACTION.WALK;
         });
-        actions.set(USER_COMMANDS.ATTACK, (movementComp, directionComp, animationComp) => {
-            animationComp.currentAnimation = animationComp.animations.get(STATE.ATTACK);
+        actions.set(USER_COMMANDS.ATTACK, (movementComp, directionComp, actionComp) => {
+            actionComp.action = ACTION.ATTACK;
         });
 
         this.actions = actions;
@@ -54,16 +54,16 @@ class PlayerControlSystem extends AbstractSystem {
     updateForEntity(entity) {
         const movementComp = entity.getComponent(Movement);
         const directionComp = entity.getComponent(Direction);
-        const animationComp = entity.getComponent(Animations);
         const keyboardControlComp = entity.getComponent(KeyboardControls);
+        const actionComp = entity.getComponent(Action);
 
         movementComp.horizontalVelocity = VELOCITY.HORIZONTAL.NONE;
         movementComp.veriticalVelocity = VELOCITY.VERTICAL.NONE;
-        animationComp.currentAnimation = animationComp.animations.get(STATE.IDLE);
+        actionComp.action = ACTION.IDLE;
 
         for (const [control, action] of keyboardControlComp.keyboardControls) {
             if (keys.get(control)) {
-                this.actions.get(action)(movementComp, directionComp, animationComp);
+                this.actions.get(action)(movementComp, directionComp, actionComp);
             }
         }
     }
@@ -138,13 +138,17 @@ class MovementSystem extends AbstractSystem {
 class AnimationSystem extends AbstractSystem {
     constructor() {
         super();
-        this.requiredComponents = [Position, Animations, Direction];
+        this.requiredComponents = [Position, Animations, Direction, Action];
     }
 
     updateForEntity(entity, deltaTime) {
         const positionComp = entity.getComponent(Position);
         const animationsComp = entity.getComponent(Animations);
         const directionComp = entity.getComponent(Direction);
+        const actionComp = entity.getComponent(Action);
+
+        animationsComp.currentAnimation = animationsComp.animations.get(actionComp.action);
+
         let currentAnimation = animationsComp.currentAnimation;
         let animationTimer = animationsComp.animationTimer;
 
@@ -206,7 +210,7 @@ class StaticImageSystem extends AbstractSystem {
 class CombatSystem extends AbstractSystem {
     constructor() {
         super();
-        this.requiredComponents = [Position, BoundingBox, Combat];
+        this.requiredComponents = [Position, BoundingBox, Combat, Action];
         this.enemyComponents = [Position, BoundingBox, Combat];
         this.enemies = [];
     }
@@ -223,9 +227,11 @@ class CombatSystem extends AbstractSystem {
 
     updateForEntity(entity, deltaTime) {
         const positionComp = entity.getComponent(Position);
-        const movementComp = entity.getComponent(Movement);
         const boundingBoxComp = entity.getComponent(BoundingBox);
         const combatComp = entity.getComponent(Combat);
+        const actionComp = entity.getComponent(Action);
+
+        combatComp.attckingTimer -= deltaTime;
 
         let boundingBox = {
             x: positionComp.x + boundingBoxComp.offsetX,
@@ -237,11 +243,19 @@ class CombatSystem extends AbstractSystem {
         let attackers = util.detectObjectCollisions(boundingBox, this.enemies);
 
         for (const attacker of attackers) {
-            // For now we hardcode that you can only attack enemies with a different combat type.
+            // TODO: For now we hardcode that you can only attack enemies with a different combat type.
             if (attacker !== entity && attacker.getComponent(Combat).type !== combatComp.type) {
-                debugger;
+                if (combatComp.type === COMBAT_TYPE.MONSTER) { // TODO: Hardcode monsters to always attack for now
+                    combatComp.attckingTimer = 100;
+                }
                 console.log('Attack detected');
             }
+        }
+
+        if (combatComp.attckingTimer > 0) { // TODO - move this to AI system? -- maybe CD should leave in hits in a component?
+            actionComp.action = ACTION.ATTACK;
+        } else {
+            actionComp.action = ACTION.IDLE;
         }
     }
 }

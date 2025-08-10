@@ -16,7 +16,7 @@ const VELOCITY = {
     },
 };
 
-const STATE = {
+const ACTION = {
     IDLE: 'IDLE',
     WALK: 'WALK',
     ATTACK: 'ATTACK',

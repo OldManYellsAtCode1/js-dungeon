@@ -1,7 +1,7 @@
 class AIControlSystem extends AbstractSystem {
     constructor() {
         super();
-        this.requiredComponents = [AIControl, Position, Direction, Animations, Movement];
+        this.requiredComponents = [AIControl, Position, Direction, Movement, Action, Combat];
         this.playerComponents = [KeyboardControls, Position];
         this.players = [];
     }
@@ -19,31 +19,34 @@ class AIControlSystem extends AbstractSystem {
     updateForEntity(entity, deltaTime) {
         const movementComp = entity.getComponent(Movement);
         const directionComp = entity.getComponent(Direction);
-        const animationComp = entity.getComponent(Animations);
         const aiControlComp = entity.getComponent(AIControl);
         const positionComp = entity.getComponent(Position);
+        const actionComp = entity.getComponent(Action);
+        const combatComp = entity.getComponent(Combat);
 
         switch (aiControlComp.type) {
             case AI_TYPE.RANDOM: this.random(
                 movementComp,
                 directionComp,
-                animationComp,
+                actionComp,
                 aiControlComp,
+                combatComp,
                 deltaTime);
             break;
 
             case AI_TYPE.CLOSE_ATTACK: this.closeAttack(
                 movementComp,
                 directionComp,
-                animationComp,
+                actionComp,
                 aiControlComp,
                 positionComp,
+                combatComp,
                 deltaTime);
             break;
         }
     }
 
-    random(movementComp, directionComp, animationComp, aiControlComp, deltaTime) {
+    random(movementComp, directionComp, actionComp, aiControlComp, combatComp, deltaTime) {
         aiControlComp.movementTimer += deltaTime;
 
         if (aiControlComp.movementTimer < 1000) {
@@ -79,15 +82,17 @@ class AIControlSystem extends AbstractSystem {
         movementComp.veriticalVelocity = verticalDirection;
         movementComp.horizontalVelocity = horizontalDirection;
 
-        if (horizontalDirection === VELOCITY.VERTICAL.NONE
+        if (combatComp.action === ACTION.ATTACK) {
+            // do nothing -- already attacking
+        } else if (horizontalDirection === VELOCITY.VERTICAL.NONE
             && verticalDirection === VELOCITY.VERTICAL.NONE) {
-            animationComp.currentAnimation = animationComp.animations.get(STATE.IDLE);
-        } else { // TODO - should there be a system to match animations to movement?
-            animationComp.currentAnimation = animationComp.animations.get(STATE.WALK);
+            actionComp.action = ACTION.IDLE;
+        } else {
+            actionComp.action = ACTION.WALK;
         }
     }
 
-    closeAttack(movementComp, directionComp, animationComp, aiControlComp, positionComp, deltaTime) {
+    closeAttack(movementComp, directionComp, actionComp, aiControlComp, positionComp, combatComp, deltaTime) {
         for (const player of this.players) {
             let playerPositionComp = player.getComponent(Position);
             let xDist = playerPositionComp.x - positionComp.x;

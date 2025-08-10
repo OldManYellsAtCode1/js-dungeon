@@ -12,14 +12,14 @@ let entityTemplates = {
 
     getPlayerAnimations: () => {
         const animationData = new Map();
-        animationData.set(STATE.IDLE, { frames: 4, row: 0, speed: 1 });
-        animationData.set(STATE.WALK, { frames: 6, row: 1, speed: 1 });
-        animationData.set(STATE.ATTACK, { frames: 3, row: 2, speed: 3 });
+        animationData.set(ACTION.IDLE, { frames: 4, row: 0, speed: 1 });
+        animationData.set(ACTION.WALK, { frames: 6, row: 1, speed: 1 });
+        animationData.set(ACTION.ATTACK, { frames: 3, row: 2, speed: 3 });
 
         return new Animations(
             knightImg,
             animationData,
-            animationData.get(STATE.IDLE),
+            animationData.get(ACTION.IDLE),
             27,
             22,
             40,
@@ -29,14 +29,14 @@ let entityTemplates = {
 
     getSlimeAnimations: () => {
         const animationData = new Map();
-        animationData.set(STATE.IDLE, { frames: 4, row: 0, speed: 1 });
-        animationData.set(STATE.WALK, { frames: 3, row: 2, speed: 2 });
-        animationData.set(STATE.ATTACK, { frames: 3, row: 2, speed: 3 });
+        animationData.set(ACTION.IDLE, { frames: 4, row: 0, speed: 1 });
+        animationData.set(ACTION.WALK, { frames: 3, row: 2, speed: 2 });
+        animationData.set(ACTION.ATTACK, { frames: 3, row: 2, speed: 10 });
 
         return new Animations(
             slimeImg,
             animationData,
-            animationData.get(STATE.IDLE),
+            animationData.get(ACTION.IDLE),
             24,
             24,
             24,
@@ -46,14 +46,14 @@ let entityTemplates = {
 
     getBatAnimations: () => {
         const animationData = new Map();
-        animationData.set(STATE.IDLE, { frames: 4, row: 0, speed: 1 });
-        animationData.set(STATE.WALK, { frames: 4, row: 0, speed: 2 });
-        animationData.set(STATE.ATTACK, { frames: 4, row: 0, speed: 3 });
+        animationData.set(ACTION.IDLE, { frames: 4, row: 0, speed: 1 });
+        animationData.set(ACTION.WALK, { frames: 4, row: 0, speed: 2 });
+        animationData.set(ACTION.ATTACK, { frames: 4, row: 0, speed: 10 });
 
         return new Animations(
             batImg,
             animationData,
-            animationData.get(STATE.IDLE),
+            animationData.get(ACTION.IDLE),
             16,
             16,
             16,
@@ -62,6 +62,7 @@ let entityTemplates = {
     },
 
     'player': (data) => {
+        const actionComp = new Action(ACTION.IDLE);
         const positionComp = new Position(data.x, data.y);
         const sizeComp = new BoundingBox(4, 4, 20, 24);
         const directionComp = new Direction(null);
@@ -71,6 +72,7 @@ let entityTemplates = {
         const animationsComp = entityTemplates.getPlayerAnimations();
 
         const entity = world.createEntity('player');
+        entity.addComponent(actionComp);
         entity.addComponent(positionComp);
         entity.addComponent(directionComp);
         entity.addComponent(keyboardControlsComp);
@@ -81,6 +83,7 @@ let entityTemplates = {
     },
 
     'slime': (data) => {
+        const actionComp = new Action(ACTION.IDLE);
         const positionComp = new Position(data.x, data.y);
         const sizeComp = new BoundingBox(5, 5, 16, 16);
         const directionComp = new Direction(null);
@@ -90,6 +93,7 @@ let entityTemplates = {
         const animationsComp = entityTemplates.getSlimeAnimations();
 
         const entity = world.createEntity('slime');
+        entity.addComponent(actionComp);
         entity.addComponent(positionComp);
         entity.addComponent(directionComp);
         entity.addComponent(movementComp);
@@ -100,6 +104,7 @@ let entityTemplates = {
     },
 
     'bat': (data) => {
+        const actionComp = new Action(ACTION.IDLE);
         const positionComp = new Position(data.x, data.y);
         const sizeComp = new BoundingBox(2, 2, 12, 12);
         const directionComp = new Direction(null);
@@ -109,6 +114,7 @@ let entityTemplates = {
         const animationsComp = entityTemplates.getBatAnimations();
 
         const entity = world.createEntity('bat');
+        entity.addComponent(actionComp);
         entity.addComponent(positionComp);
         entity.addComponent(directionComp);
         entity.addComponent(movementComp);
