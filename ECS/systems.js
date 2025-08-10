@@ -118,14 +118,20 @@ class MovementSystem extends AbstractSystem {
             height: boundingBoxComp.height,
         };
 
-        if (!util.detectMapCollision(boundingBox) &&
-            !util.detectObjectCollision(boundingBox, this.obstacles)) {
-
-            positionComp.x = nextPos.x;
-            positionComp.y = nextPos.y;
+        if (util.detectMapCollision(boundingBox)) {
+            return;
         }
 
-        // console.log(positionComp.x.toString() + " , " + positionComp.y.toString());
+        let obstacles = util.detectObjectCollisions(boundingBox, this.obstacles);
+
+        for (const obstacle of obstacles) {
+            if (obstacle !== entity && !obstacle.getComponent(BoundingBox).passable) {
+                return;
+            }
+        }
+
+        positionComp.x = nextPos.x;
+        positionComp.y = nextPos.y;
     }
 }
 
@@ -194,5 +200,48 @@ class StaticImageSystem extends AbstractSystem {
             staticImageComp.image,
             staticImageComp.x, staticImageComp.y, staticImageComp.width, staticImageComp.height,
             positionComp.x, positionComp.y, staticImageComp.width, staticImageComp.height);
+    }
+}
+
+class CombatSystem extends AbstractSystem {
+    constructor() {
+        super();
+        this.requiredComponents = [Position, BoundingBox, Combat];
+        this.enemyComponents = [Position, BoundingBox, Combat];
+        this.enemies = [];
+    }
+
+    before(entities, deltaTime) {
+        // Find any enemies we will need to test against
+        this.enemies = [];
+        entities.forEach(entity => {
+            if (this.enemyComponents.every(comp => entity.hasComponent(comp))) {
+                this.enemies.push(entity);
+            }
+        });
+    };
+
+    updateForEntity(entity, deltaTime) {
+        const positionComp = entity.getComponent(Position);
+        const movementComp = entity.getComponent(Movement);
+        const boundingBoxComp = entity.getComponent(BoundingBox);
+        const combatComp = entity.getComponent(Combat);
+
+        let boundingBox = {
+            x: positionComp.x + boundingBoxComp.offsetX,
+            y: positionComp.y + boundingBoxComp.offsetY,
+            width: boundingBoxComp.width,
+            height: boundingBoxComp.height,
+        };
+
+        let attackers = util.detectObjectCollisions(boundingBox, this.enemies);
+
+        for (const attacker of attackers) {
+            // For now we hardcode that you can only attack enemies with a different combat type.
+            if (attacker !== entity && attacker.getComponent(Combat).type !== combatComp.type) {
+                debugger;
+                console.log('Attack detected');
+            }
+        }
     }
 }

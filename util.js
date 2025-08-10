@@ -42,7 +42,9 @@ let util = {
         return false;
     },
 
-    detectObjectCollision(boundingBox, obstacles) {
+    detectObjectCollisions(boundingBox, obstacles) {
+        let hits = [];
+
         for (const obstacle of obstacles) {
             const positionComp = obstacle.getComponent(Position);
             const boundingBoxComp = obstacle.getComponent(BoundingBox);
@@ -55,16 +57,11 @@ let util = {
             };
 
             if (this.detectAABBCollision(obstacleBoundingBox, boundingBox)) {
-                // TODO - add debug param
-                // console.log(currentLevel.tiles[levelObject.id]);
-
-                if (!boundingBoxComp.passable) {
-                    return obstacle;
-                }
+                hits.push(obstacle);
             }
         }
 
-        return false;
+        return hits;
     },
 
     detectMapCollision(boundingBox) {

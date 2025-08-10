@@ -32,8 +32,8 @@ class ECS {
         this.nextEntityId = 1000;
     }
 
-    createEntity() {
-        const entity = new Entity(this.nextEntityId++);
+    createEntity(name) {
+        const entity = new Entity(name + '-' +this.nextEntityId++);
         this.entities.push(entity);
         return entity;
     }

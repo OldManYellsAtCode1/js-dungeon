@@ -28,6 +28,7 @@ world.addSystem(new AIControlSystem());
 world.addSystem(new MovementSystem());
 world.addSystem(new StaticImageSystem());
 world.addSystem(new AnimationSystem());
+world.addSystem(new CombatSystem());
 
 util.loadImages(
     [

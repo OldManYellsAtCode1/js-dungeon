@@ -34,3 +34,9 @@ const AI_TYPE = {
     RANDOM: 'RANDOM',
     CLOSE_ATTACK: 'CLOSE_ATTACK',
 }
+
+const COMBAT_TYPE = {
+    PLAYER: 'PLAYER',
+    MONSTER: 'MONSTER',
+    NEUTRAL: 'NEUTRAL',
+}

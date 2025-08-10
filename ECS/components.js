@@ -33,6 +33,16 @@ class Direction {
     }
 }
 
+class Combat {
+    constructor(damage = 0, woundedCountdown = 1000, type = COMBAT_TYPE.NEUTRAL) {
+        this.damage = damage;
+        this.type = type;
+        this.woundedCountdown = woundedCountdown;
+        this.woundedTimer = 0;
+        this.attacking = false;
+    }
+}
+
 class KeyboardControls {
     constructor(keyboardControls) {
         this.keyboardControls = keyboardControls;
