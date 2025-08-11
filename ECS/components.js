@@ -40,10 +40,9 @@ class Action {
 }
 
 class Combat {
-    constructor(damage = 0, woundedCountdown = 1000, type = COMBAT_TYPE.NEUTRAL) {
+    constructor(damage = 0, type = COMBAT_TYPE.NEUTRAL) {
         this.damage = damage;
         this.type = type;
-        this.woundedCountdown = woundedCountdown;
         this.woundedTimer = 0;
         this.attackingTimer = 0;
     }

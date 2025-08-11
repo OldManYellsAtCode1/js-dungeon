@@ -146,6 +146,9 @@ class AnimationSystem extends AbstractSystem {
         const animationsComp = entity.getComponent(Animations);
         const directionComp = entity.getComponent(Direction);
         const actionComp = entity.getComponent(Action);
+        const combatComp = entity.getComponent(Combat);
+
+        let wounded = combatComp && combatComp.woundedTimer > 0;
 
         animationsComp.currentAnimation = animationsComp.animations.get(actionComp.action);
 
@@ -171,6 +174,13 @@ class AnimationSystem extends AbstractSystem {
         let displayWidth = animationsComp.displayWidth;
 
         gameCtx.save();
+
+
+        if(wounded) {
+            if (Math.floor(animationTimer / 100) % 2 === 0) { // Flash 5 time a second
+                gameCtx.filter = 'brightness(1000%)';
+            }
+        }
 
         if (directionComp.currentDirection === DIRECTION.LEFT) {
             gameCtx.scale(-1, 1);
@@ -217,6 +227,7 @@ class CombatSystem extends AbstractSystem {
 
     before(entities, deltaTime) {
         // Find any enemies we will need to test against
+        // TODO - Move this into it's own system and store against entity
         this.enemies = [];
         entities.forEach(entity => {
             if (this.enemyComponents.every(comp => entity.hasComponent(comp))) {
@@ -232,6 +243,7 @@ class CombatSystem extends AbstractSystem {
         const actionComp = entity.getComponent(Action);
 
         combatComp.attckingTimer -= deltaTime;
+        combatComp.woundedTimer -= deltaTime;
 
         let boundingBox = {
             x: positionComp.x + boundingBoxComp.offsetX,
@@ -246,9 +258,16 @@ class CombatSystem extends AbstractSystem {
             // TODO: For now we hardcode that you can only attack enemies with a different combat type.
             if (attacker !== entity && attacker.getComponent(Combat).type !== combatComp.type) {
                 if (combatComp.type === COMBAT_TYPE.MONSTER) { // TODO: Hardcode monsters to always attack for now
-                    combatComp.attckingTimer = 100;
+                    if (combatComp.attckingTimer <= 0) {
+                        combatComp.attckingTimer = 100;
+                    }
+
+                    if (attacker.getComponent(Combat).woundedTimer <= 0) {
+                        console.log("wounded");
+                        attacker.getComponent(Combat).woundedTimer = 500;
+                    }
                 }
-                console.log('Attack detected');
+                //console.log('Attack detected');
             }
         }
 

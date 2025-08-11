@@ -67,7 +67,7 @@ let entityTemplates = {
         const sizeComp = new BoundingBox(4, 4, 20, 24);
         const directionComp = new Direction(null);
         const movementComp = new Movement(120);
-        const damageComp = new Combat(10, 500, COMBAT_TYPE.PLAYER);
+        const damageComp = new Combat(10, COMBAT_TYPE.PLAYER);
         const keyboardControlsComp = entityTemplates.getPlayerControls();
         const animationsComp = entityTemplates.getPlayerAnimations();
 
@@ -88,7 +88,7 @@ let entityTemplates = {
         const sizeComp = new BoundingBox(5, 5, 16, 16);
         const directionComp = new Direction(null);
         const movementComp = new Movement(80);
-        const damageComp = new Combat(10, 500, COMBAT_TYPE.MONSTER);
+        const damageComp = new Combat(10, COMBAT_TYPE.MONSTER);
         const aiControlComp = new AIControl(AI_TYPE.RANDOM);
         const animationsComp = entityTemplates.getSlimeAnimations();
 
@@ -109,7 +109,7 @@ let entityTemplates = {
         const sizeComp = new BoundingBox(2, 2, 12, 12);
         const directionComp = new Direction(null);
         const movementComp = new Movement(50);
-        const damageComp = new Combat(5, 100, COMBAT_TYPE.MONSTER);
+        const damageComp = new Combat(5, COMBAT_TYPE.MONSTER);
         const aiControlComp = new AIControl(AI_TYPE.CLOSE_ATTACK);
         const animationsComp = entityTemplates.getBatAnimations();
 
