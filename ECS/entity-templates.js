@@ -67,7 +67,7 @@ let entityTemplates = {
         const sizeComp = new BoundingBox(4, 4, 20, 24);
         const directionComp = new Direction(null);
         const movementComp = new Movement(120);
-        const damageComp = new Combat(10, COMBAT_TYPE.PLAYER);
+        const damageComp = new Combat(10, COMBAT_TYPE.PLAYER, {x: 16, y: 0, width: 24, height: 16});
         const keyboardControlsComp = entityTemplates.getPlayerControls();
         const animationsComp = entityTemplates.getPlayerAnimations();
 

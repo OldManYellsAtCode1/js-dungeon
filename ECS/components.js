@@ -40,11 +40,13 @@ class Action {
 }
 
 class Combat {
-    constructor(damage = 0, type = COMBAT_TYPE.NEUTRAL) {
+    constructor(damage = 0, type = COMBAT_TYPE.NEUTRAL, attackBox = null) {
         this.damage = damage;
         this.type = type;
         this.woundedTimer = 0;
         this.attackingTimer = 0;
+        // The hit box for the entities attack, offset from their main bounding box
+        this.attackBox = attackBox;
     }
 }
 

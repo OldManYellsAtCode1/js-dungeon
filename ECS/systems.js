@@ -220,7 +220,7 @@ class StaticImageSystem extends AbstractSystem {
 class CombatSystem extends AbstractSystem {
     constructor() {
         super();
-        this.requiredComponents = [Position, BoundingBox, Combat, Action];
+        this.requiredComponents = [Position, BoundingBox, Direction, Combat, Action];
         this.enemyComponents = [Position, BoundingBox, Combat];
         this.enemies = [];
     }
@@ -241,6 +241,7 @@ class CombatSystem extends AbstractSystem {
         const boundingBoxComp = entity.getComponent(BoundingBox);
         const combatComp = entity.getComponent(Combat);
         const actionComp = entity.getComponent(Action);
+        const directionComp = entity.getComponent(Direction);
 
         combatComp.attckingTimer -= deltaTime;
         combatComp.woundedTimer -= deltaTime;
@@ -268,6 +269,36 @@ class CombatSystem extends AbstractSystem {
                     }
                 }
                 //console.log('Attack detected');
+            }
+        }
+
+        // TODO - this is just wrong - should be testing for existence of attackBox
+        if (combatComp.type === COMBAT_TYPE.PLAYER && actionComp.action === ACTION.ATTACK) {
+            // TODO - check for null attackBox, see above
+            let isRight = directionComp.currentDirection === DIRECTION.RIGHT;
+
+            let xPos;
+
+            if (isRight) {
+                xPos = boundingBox.x + combatComp.attackBox.x
+            } else {
+                xPos = (boundingBox.x + boundingBox.width) - combatComp.attackBox.x - combatComp.attackBox.width;
+                debugger;
+            }
+
+            let attackBox = {
+                x: xPos,
+                y: boundingBox.y + combatComp.attackBox.y,
+                width: combatComp.attackBox.width,
+                height: combatComp.attackBox.height,
+            }
+
+            let attackerCollisions = util.detectObjectCollisions(attackBox, this.enemies);
+
+            for (const attacker of attackerCollisions) {
+                if (attacker !== entity) {
+                    attacker.getComponent(Combat).woundedTimer = 500;
+                }
             }
         }
 
