@@ -167,4 +167,84 @@ let entityTemplates = {
         entity.addComponent(actionComp);
         entity.addComponent(staticImageComp);
     },
+
+    'doorway': (data) => {
+        const positionComp = new Position(data.x, data.y);
+        const boundingBoxComp = new BoundingBox(3, 3, 26, 26, true);
+        const actionComp = new Action(ACTION.IDLE);
+        const staticImageComp = new StaticImage(
+            tilesetImg,
+            5 * TILE_SIZE, 0 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            TILE_SIZE, TILE_SIZE);
+
+        const entity = world.createEntity('doorway');
+        entity.addComponent(positionComp);
+        entity.addComponent(boundingBoxComp);
+        entity.addComponent(actionComp);
+        entity.addComponent(staticImageComp);
+    },
+
+    'doorway-light': (data) => {
+        const positionComp = new Position(data.x, data.y);
+        const boundingBoxComp = new BoundingBox(3, 3, 26, 26, true);
+        const actionComp = new Action(ACTION.IDLE);
+        const staticImageComp = new StaticImage(
+            tilesetImg,
+            5 * TILE_SIZE, 1 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            TILE_SIZE, TILE_SIZE);
+
+        const entity = world.createEntity('doorway-light');
+        entity.addComponent(positionComp);
+        entity.addComponent(boundingBoxComp);
+        entity.addComponent(actionComp);
+        entity.addComponent(staticImageComp);
+    },
+
+    'rocks-brown': (data) => {
+        const positionComp = new Position(data.x, data.y);
+        const boundingBoxComp = new BoundingBox(3, 3, 26, 26, true);
+        const actionComp = new Action(ACTION.IDLE);
+        const staticImageComp = new StaticImage(
+            tilesetImg,
+            6 * TILE_SIZE, 1 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            TILE_SIZE, TILE_SIZE);
+
+        const entity = world.createEntity('rocks-brown');
+        entity.addComponent(positionComp);
+        entity.addComponent(boundingBoxComp);
+        entity.addComponent(actionComp);
+        entity.addComponent(staticImageComp);
+    },
+
+    'rocks-big': (data) => {
+        const positionComp = new Position(data.x, data.y);
+        const boundingBoxComp = new BoundingBox(4, 4, 24, 24, false);
+        const actionComp = new Action(ACTION.IDLE);
+        const staticImageComp = new StaticImage(
+            tilesetImg,
+            7 * TILE_SIZE, 0 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            TILE_SIZE, TILE_SIZE);
+
+        const entity = world.createEntity('rocks-big');
+        entity.addComponent(positionComp);
+        entity.addComponent(boundingBoxComp);
+        entity.addComponent(actionComp);
+        entity.addComponent(staticImageComp);
+    },
+
+    'skeleton': (data) => {
+        const positionComp = new Position(data.x, data.y);
+        const boundingBoxComp = new BoundingBox(3, 3, 26, 26, true);
+        const actionComp = new Action(ACTION.IDLE);
+        const staticImageComp = new StaticImage(
+            tilesetImg,
+            7 * TILE_SIZE, 2 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            TILE_SIZE, TILE_SIZE);
+
+        const entity = world.createEntity('skeleton');
+        entity.addComponent(positionComp);
+        entity.addComponent(boundingBoxComp);
+        entity.addComponent(actionComp);
+        entity.addComponent(staticImageComp);
+    },
 };

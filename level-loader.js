@@ -7,7 +7,14 @@ function loadLevel(level, ecs) {
             }
 
             default : {
-                entityTemplates[entity.type](entity);
+                let entityTemplate = entityTemplates[entity.type];
+
+                if(!entityTemplate) {
+                    console.warn(`Entity "${entity.type}" not found.`);
+                    break;
+                }
+
+                entityTemplate(entity);
                 break;
             }
         }
