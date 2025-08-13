@@ -56,9 +56,9 @@ class ECS {
 
     cleanUpEntities() {
         this.entities = this.entities.filter(entity => {
-            let healthComp = entity.getComponent(Health);
+            let actionComp = entity.getComponent(Action);
 
-            return !healthComp || healthComp.health > 0;
+            return !actionComp || actionComp.action !== ACTION.DEAD;
         });
     }
 }

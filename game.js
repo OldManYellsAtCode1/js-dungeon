@@ -23,13 +23,14 @@ if (!editorEnabled) {
 let lastTime = 0;
 
 const world = new ECS();
-world.addSystem(new PlayerControlSystem());
+world.addSystem(new KeyboardControlSystem());
 world.addSystem(new AIControlSystem());
 world.addSystem(new MovementSystem());
 world.addSystem(new StaticImageSystem());
 world.addSystem(new AnimationSystem());
 world.addSystem(new CombatSystem());
 world.addSystem(new CollectableSystem());
+world.addSystem(new HealthSystem());
 
 util.loadImages(
     [

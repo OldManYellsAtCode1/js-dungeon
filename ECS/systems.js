@@ -20,7 +20,7 @@ class AbstractSystem {
     };
 }
 
-class PlayerControlSystem extends AbstractSystem {
+class KeyboardControlSystem extends AbstractSystem {
     constructor() {
         super();
         this.requiredComponents = [KeyboardControls, Position, Direction, Movement, Action];
@@ -226,8 +226,6 @@ class CombatSystem extends AbstractSystem {
     }
 
     before(entities, deltaTime) {
-        // Find any enemies we will need to test against
-        // TODO - Move this into it's own system and store against entity
         this.enemies = [];
         entities.forEach(entity => {
             if (this.enemyComponents.every(comp => entity.hasComponent(comp))) {
@@ -349,14 +347,30 @@ class CollectableSystem extends AbstractSystem {
 
         for (const collectable of collectables) {
             const collectableComp = collectable.getComponent(Collectable);
-            const collectableHealthComp = collectable.getComponent(Health); // TODO how to ensure all collectables have health?
+            const collectableActionComp = collectable.getComponent(Action);
 
             healthComp.health += collectableComp.health;
             pointsComp.points += collectableComp.points;
 
-            collectableHealthComp.health = 0;
+            collectableActionComp.action = ACTION.DEAD;
 
             console.log(entity.id + ' - health: ' + healthComp.health + ' , points: ' + pointsComp.points);
+        }
+    }
+}
+
+class HealthSystem extends AbstractSystem {
+    constructor() {
+        super();
+        this.requiredComponents = [Health, Action];
+    }
+
+    updateForEntity(entity, deltaTime) {
+        const healthComp = entity.getComponent(Health);
+        const actionComp = entity.getComponent(Action);
+
+        if(healthComp.health <= 0) {
+            actionComp.action = ACTION.DEAD;
         }
     }
 }
