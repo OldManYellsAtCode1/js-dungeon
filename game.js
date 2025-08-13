@@ -29,6 +29,7 @@ world.addSystem(new MovementSystem());
 world.addSystem(new StaticImageSystem());
 world.addSystem(new AnimationSystem());
 world.addSystem(new CombatSystem());
+world.addSystem(new CollectableSystem());
 
 util.loadImages(
     [

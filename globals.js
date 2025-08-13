@@ -20,6 +20,7 @@ const ACTION = {
     IDLE: 'IDLE',
     WALK: 'WALK',
     ATTACK: 'ATTACK',
+    DEAD: 'DEAD',
 };
 
 const USER_COMMANDS = {

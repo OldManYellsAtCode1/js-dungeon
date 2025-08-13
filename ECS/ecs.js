@@ -46,9 +46,19 @@ class ECS {
         this.systems.forEach(system => {
             system.update(this.entities, deltaTime);
         });
+
+        this.cleanUpEntities();
     }
 
     resetEntities() {
         this.entities = [];
+    }
+
+    cleanUpEntities() {
+        this.entities = this.entities.filter(entity => {
+            let healthComp = entity.getComponent(Health);
+
+            return !healthComp || healthComp.health > 0;
+        });
     }
 }

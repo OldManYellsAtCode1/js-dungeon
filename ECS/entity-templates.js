@@ -64,10 +64,12 @@ let entityTemplates = {
     'player': (data) => {
         const actionComp = new Action(ACTION.IDLE);
         const positionComp = new Position(data.x, data.y);
-        const sizeComp = new BoundingBox(4, 4, 20, 24);
+        const sizeComp = new BoundingBox(2, 3, 20, 24);
         const directionComp = new Direction(null);
         const movementComp = new Movement(120);
-        const damageComp = new Combat(10, COMBAT_TYPE.PLAYER, {x: 16, y: 0, width: 24, height: 16});
+        const healthComp = new Health(120);
+        const pointsComp = new Points(0);
+        const combatComp = new Combat(10, COMBAT_TYPE.PLAYER, {x: 16, y: 0, width: 24, height: 16});
         const keyboardControlsComp = entityTemplates.getPlayerControls();
         const animationsComp = entityTemplates.getPlayerAnimations();
 
@@ -79,15 +81,18 @@ let entityTemplates = {
         entity.addComponent(movementComp);
         entity.addComponent(animationsComp);
         entity.addComponent(sizeComp);
-        entity.addComponent(damageComp);
+        entity.addComponent(combatComp);
+        entity.addComponent(healthComp);
+        entity.addComponent(pointsComp);
     },
 
     'slime': (data) => {
         const actionComp = new Action(ACTION.IDLE);
         const positionComp = new Position(data.x, data.y);
-        const sizeComp = new BoundingBox(5, 5, 16, 16);
+        const sizeComp = new BoundingBox(2, 2, 20, 20);
         const directionComp = new Direction(null);
         const movementComp = new Movement(80);
+        const healthComp = new Health(60);
         const damageComp = new Combat(10, COMBAT_TYPE.MONSTER);
         const aiControlComp = new AIControl(AI_TYPE.RANDOM);
         const animationsComp = entityTemplates.getSlimeAnimations();
@@ -101,6 +106,7 @@ let entityTemplates = {
         entity.addComponent(animationsComp);
         entity.addComponent(sizeComp);
         entity.addComponent(damageComp);
+        entity.addComponent(healthComp);
     },
 
     'bat': (data) => {
@@ -109,6 +115,7 @@ let entityTemplates = {
         const sizeComp = new BoundingBox(2, 2, 12, 12);
         const directionComp = new Direction(null);
         const movementComp = new Movement(50);
+        const healthComp = new Health(30);
         const damageComp = new Combat(5, COMBAT_TYPE.MONSTER);
         const aiControlComp = new AIControl(AI_TYPE.CLOSE_ATTACK);
         const animationsComp = entityTemplates.getBatAnimations();
@@ -122,5 +129,42 @@ let entityTemplates = {
         entity.addComponent(animationsComp);
         entity.addComponent(sizeComp);
         entity.addComponent(damageComp);
+        entity.addComponent(healthComp);
+    },
+
+    'mushroom': (data) => {
+        const positionComp = new Position(data.x, data.y);
+        const sizeComp = new BoundingBox(3, 3, 26, 26, true);
+        const collectableComp = new Collectable(30, 10);
+        const healthComp = new Health(1);
+        const staticImageComp = new StaticImage(
+            tilesetImg,
+            7 * TILE_SIZE, 1 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            TILE_SIZE, TILE_SIZE);
+
+        const entity = world.createEntity('mushroom');
+        entity.addComponent(positionComp);
+        entity.addComponent(sizeComp);
+        entity.addComponent(collectableComp);
+        entity.addComponent(healthComp);
+        entity.addComponent(staticImageComp);
+    },
+
+    'crystal': (data) => {
+        const positionComp = new Position(data.x, data.y);
+        const sizeComp = new BoundingBox(3, 3, 26, 26, true);
+        const collectableComp = new Collectable(0, 100);
+        const healthComp = new Health(1);
+        const staticImageComp = new StaticImage(
+            tilesetImg,
+            5 * TILE_SIZE, 2 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            TILE_SIZE, TILE_SIZE);
+
+        const entity = world.createEntity('crystal');
+        entity.addComponent(positionComp);
+        entity.addComponent(sizeComp);
+        entity.addComponent(collectableComp);
+        entity.addComponent(healthComp);
+        entity.addComponent(staticImageComp);
     },
 };

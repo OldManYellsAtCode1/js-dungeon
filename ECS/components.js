@@ -50,6 +50,25 @@ class Combat {
     }
 }
 
+class Health {
+    constructor(health = 100) {
+        this.health = health;
+    }
+}
+
+class Points {
+    constructor(points = 0) {
+        this.points = points;
+    }
+}
+
+class Collectable {
+    constructor(health = 0, points = 0) {
+        this.health = health;
+        this.points = points;
+    }
+}
+
 class KeyboardControls {
     constructor(keyboardControls) {
         this.keyboardControls = keyboardControls;

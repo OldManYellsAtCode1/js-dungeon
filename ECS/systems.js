@@ -176,7 +176,7 @@ class AnimationSystem extends AbstractSystem {
         gameCtx.save();
 
 
-        if(wounded) {
+        if (wounded) {
             if (Math.floor(animationTimer / 100) % 2 === 0) { // Flash 5 time a second
                 gameCtx.filter = 'brightness(1000%)';
             }
@@ -221,7 +221,7 @@ class CombatSystem extends AbstractSystem {
     constructor() {
         super();
         this.requiredComponents = [Position, BoundingBox, Direction, Combat, Action];
-        this.enemyComponents = [Position, BoundingBox, Combat];
+        this.enemyComponents = [Position, BoundingBox, Combat, Health];
         this.enemies = [];
     }
 
@@ -264,8 +264,10 @@ class CombatSystem extends AbstractSystem {
                     }
 
                     if (attacker.getComponent(Combat).woundedTimer <= 0) {
-                        console.log("wounded");
+                        console.log('wounded');
                         attacker.getComponent(Combat).woundedTimer = 500;
+                        attacker.getComponent(Health).health -= 10;
+                        console.log(attacker.id + ' - health: ' + attacker.getComponent(Health).health);
                     }
                 }
                 //console.log('Attack detected');
@@ -280,7 +282,7 @@ class CombatSystem extends AbstractSystem {
             let xPos;
 
             if (isRight) {
-                xPos = boundingBox.x + combatComp.attackBox.x
+                xPos = boundingBox.x + combatComp.attackBox.x;
             } else {
                 xPos = (boundingBox.x + boundingBox.width) - combatComp.attackBox.x - combatComp.attackBox.width;
                 debugger;
@@ -291,21 +293,71 @@ class CombatSystem extends AbstractSystem {
                 y: boundingBox.y + combatComp.attackBox.y,
                 width: combatComp.attackBox.width,
                 height: combatComp.attackBox.height,
-            }
+            };
 
             let attackerCollisions = util.detectObjectCollisions(attackBox, this.enemies);
 
             for (const attacker of attackerCollisions) {
-                if (attacker !== entity) {
+                if (attacker !== entity && attacker.getComponent(Combat).woundedTimer <= 0) {
                     attacker.getComponent(Combat).woundedTimer = 500;
+
+                    attacker.getComponent(Health).health -= 10;
+                    attacker.getComponent(Health).health -= 10;
+                    console.log(attacker.id + ' - health: ' + attacker.getComponent(Health).health);
                 }
             }
         }
 
         if (combatComp.attckingTimer > 0) { // TODO - move this to AI system? -- maybe CD should leave in hits in a component?
             actionComp.action = ACTION.ATTACK;
-        } else {
+        } else if (actionComp.action === ACTION.ATTACK) {
             actionComp.action = ACTION.IDLE;
         }
     }
 }
+
+class CollectableSystem extends AbstractSystem {
+    constructor() {
+        super();
+        this.requiredComponents = [KeyboardControls, Position, BoundingBox, Health, Points];
+        this.collectables = [];
+    }
+
+    before(entities, deltaTime) {
+        this.collectables = [];
+        entities.forEach(entity => {
+            if (entity.hasComponent(Collectable)) {
+                this.collectables.push(entity);
+            }
+        });
+    };
+
+    updateForEntity(entity, deltaTime) {
+        const positionComp = entity.getComponent(Position);
+        const boundingBoxComp = entity.getComponent(BoundingBox);
+        const healthComp = entity.getComponent(Health);
+        const pointsComp = entity.getComponent(Points);
+
+        let boundingBox = {
+            x: positionComp.x + boundingBoxComp.offsetX,
+            y: positionComp.y + boundingBoxComp.offsetY,
+            width: boundingBoxComp.width,
+            height: boundingBoxComp.height,
+        };
+
+        let collectables = util.detectObjectCollisions(boundingBox, this.collectables);
+
+        for (const collectable of collectables) {
+            const collectableComp = collectable.getComponent(Collectable);
+            const collectableHealthComp = collectable.getComponent(Health); // TODO how to ensure all collectables have health?
+
+            healthComp.health += collectableComp.health;
+            pointsComp.points += collectableComp.points;
+
+            collectableHealthComp.health = 0;
+
+            console.log(entity.id + ' - health: ' + healthComp.health + ' , points: ' + pointsComp.points);
+        }
+    }
+}
+
