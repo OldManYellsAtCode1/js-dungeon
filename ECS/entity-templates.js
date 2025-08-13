@@ -139,7 +139,7 @@ let entityTemplates = {
         const actionComp = new Action(ACTION.IDLE);
         const staticImageComp = new StaticImage(
             tilesetImg,
-            7 * TILE_SIZE, 1 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            7 * TILE_SIZE, 1 * TILE_SIZE,
             TILE_SIZE, TILE_SIZE);
 
         const entity = world.createEntity('mushroom');
@@ -157,7 +157,7 @@ let entityTemplates = {
         const actionComp = new Action(ACTION.IDLE);
         const staticImageComp = new StaticImage(
             tilesetImg,
-            5 * TILE_SIZE, 2 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            5 * TILE_SIZE, 2 * TILE_SIZE,
             TILE_SIZE, TILE_SIZE);
 
         const entity = world.createEntity('crystal');
@@ -174,7 +174,7 @@ let entityTemplates = {
         const actionComp = new Action(ACTION.IDLE);
         const staticImageComp = new StaticImage(
             tilesetImg,
-            5 * TILE_SIZE, 0 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            5 * TILE_SIZE, 0 * TILE_SIZE,
             TILE_SIZE, TILE_SIZE);
 
         const entity = world.createEntity('doorway');
@@ -190,7 +190,7 @@ let entityTemplates = {
         const actionComp = new Action(ACTION.IDLE);
         const staticImageComp = new StaticImage(
             tilesetImg,
-            5 * TILE_SIZE, 1 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            5 * TILE_SIZE, 1 * TILE_SIZE,
             TILE_SIZE, TILE_SIZE);
 
         const entity = world.createEntity('doorway-light');
@@ -206,7 +206,7 @@ let entityTemplates = {
         const actionComp = new Action(ACTION.IDLE);
         const staticImageComp = new StaticImage(
             tilesetImg,
-            6 * TILE_SIZE, 1 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            6 * TILE_SIZE, 1 * TILE_SIZE,
             TILE_SIZE, TILE_SIZE);
 
         const entity = world.createEntity('rocks-brown');
@@ -222,7 +222,7 @@ let entityTemplates = {
         const actionComp = new Action(ACTION.IDLE);
         const staticImageComp = new StaticImage(
             tilesetImg,
-            7 * TILE_SIZE, 0 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            7 * TILE_SIZE, 0 * TILE_SIZE,
             TILE_SIZE, TILE_SIZE);
 
         const entity = world.createEntity('rocks-big');
@@ -238,7 +238,7 @@ let entityTemplates = {
         const actionComp = new Action(ACTION.IDLE);
         const staticImageComp = new StaticImage(
             tilesetImg,
-            7 * TILE_SIZE, 2 * TILE_SIZE, // TODO - how to avoid hard coding? Update editor?
+            7 * TILE_SIZE, 2 * TILE_SIZE,
             TILE_SIZE, TILE_SIZE);
 
         const entity = world.createEntity('skeleton');
