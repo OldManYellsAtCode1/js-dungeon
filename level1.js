@@ -75,6 +75,14 @@ const level1 = {
         'y': 200,
     }, {
         'type': 'bat',
+        'x': 260,
+        'y': 240,
+    }, {
+        'type': 'bat',
+        'x': 280,
+        'y': 200,
+    }, {
+        'type': 'bat',
         'x': 620,
         'y': 240,
     }, {
@@ -89,6 +97,10 @@ const level1 = {
         'type': 'bat',
         'x': 600,
         'y': 210,
+    }, {
+        'type': 'crystal',
+        'x': 32,
+        'y': 228,
     }, {
         'type': 'crystal',
         'x': 64,
