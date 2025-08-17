@@ -1,7 +1,7 @@
 class AIControlSystem extends AbstractSystem {
     constructor() {
         super();
-        this.requiredComponents = [AIControl, Position, Direction, Movement, Action, Combat];
+        this.requiredComponents = [AIControl, Position, Direction, Movement, Action];
         this.playerComponents = [KeyboardControls, Position];
         this.players = [];
     }
@@ -22,7 +22,6 @@ class AIControlSystem extends AbstractSystem {
         const aiControlComp = entity.getComponent(AIControl);
         const positionComp = entity.getComponent(Position);
         const actionComp = entity.getComponent(Action);
-        const combatComp = entity.getComponent(Combat);
 
         switch (aiControlComp.type) {
             case AI_TYPE.RANDOM: this.random(
@@ -30,7 +29,6 @@ class AIControlSystem extends AbstractSystem {
                 directionComp,
                 actionComp,
                 aiControlComp,
-                combatComp,
                 deltaTime);
             break;
 
@@ -40,13 +38,12 @@ class AIControlSystem extends AbstractSystem {
                 actionComp,
                 aiControlComp,
                 positionComp,
-                combatComp,
                 deltaTime);
             break;
         }
     }
 
-    random(movementComp, directionComp, actionComp, aiControlComp, combatComp, deltaTime) {
+    random(movementComp, directionComp, actionComp, aiControlComp, deltaTime) {
         aiControlComp.movementTimer += deltaTime;
 
         if (aiControlComp.movementTimer < 1000) {
@@ -82,9 +79,7 @@ class AIControlSystem extends AbstractSystem {
         movementComp.veriticalVelocity = verticalDirection;
         movementComp.horizontalVelocity = horizontalDirection;
 
-        if (combatComp.action === ACTION.ATTACK) {
-            // do nothing -- already attacking
-        } else if (horizontalDirection === VELOCITY.VERTICAL.NONE
+        if (horizontalDirection === VELOCITY.VERTICAL.NONE
             && verticalDirection === VELOCITY.VERTICAL.NONE) {
             actionComp.action = ACTION.IDLE;
         } else {
@@ -92,7 +87,7 @@ class AIControlSystem extends AbstractSystem {
         }
     }
 
-    closeAttack(movementComp, directionComp, actionComp, aiControlComp, positionComp, combatComp, deltaTime) {
+    closeAttack(movementComp, directionComp, actionComp, aiControlComp, positionComp, deltaTime) {
         for (const player of this.players) {
             let playerPositionComp = player.getComponent(Position);
             let xDist = playerPositionComp.x - positionComp.x;

@@ -93,7 +93,7 @@ let entityTemplates = {
         const directionComp = new Direction(null);
         const movementComp = new Movement(80);
         const healthComp = new Health(60);
-        const damageComp = new Combat(10, COMBAT_TYPE.MONSTER);
+        const combatComp = new Combat(10, COMBAT_TYPE.MONSTER);
         const aiControlComp = new AIControl(AI_TYPE.RANDOM);
         const animationsComp = entityTemplates.getSlimeAnimations();
 
@@ -105,7 +105,7 @@ let entityTemplates = {
         entity.addComponent(aiControlComp);
         entity.addComponent(animationsComp);
         entity.addComponent(boundingBoxComp);
-        entity.addComponent(damageComp);
+        entity.addComponent(combatComp);
         entity.addComponent(healthComp);
     },
 
@@ -116,7 +116,7 @@ let entityTemplates = {
         const directionComp = new Direction(null);
         const movementComp = new Movement(50);
         const healthComp = new Health(30);
-        const damageComp = new Combat(5, COMBAT_TYPE.MONSTER);
+        const combatComp = new Combat(5, COMBAT_TYPE.MONSTER);
         const aiControlComp = new AIControl(AI_TYPE.CLOSE_ATTACK);
         const animationsComp = entityTemplates.getBatAnimations();
 
@@ -128,7 +128,7 @@ let entityTemplates = {
         entity.addComponent(aiControlComp);
         entity.addComponent(animationsComp);
         entity.addComponent(boundingBoxComp);
-        entity.addComponent(damageComp);
+        entity.addComponent(combatComp);
         entity.addComponent(healthComp);
     },
 
